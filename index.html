@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hammy — Your Web Pet Hamster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0a;--surface:#111111;--surface2:#181818;--border:#222222;
+  --text:#f5f5f5;--muted:#888888;--accent:#ff6b35;--accent2:#ffd23f;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* HEADER */
+header{position:fixed;top:0;left:0;right:0;z-index:100;border-bottom:1px solid var(--border);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);background:rgba(10,10,10,0.85)}
+.header-inner{max-width:1100px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'DM Serif Display',serif;font-size:22px;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:8px}
+.logo-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+nav{display:flex;gap:24px}
+nav a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
+nav a:hover{color:var(--text)}
+
+/* HERO */
+.hero{padding:120px 24px 80px;max-width:1100px;margin:0 auto;position:relative}
+.hero-bg{position:absolute;top:0;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse at center,rgba(255,107,53,0.12) 0%,transparent 70%);pointer-events:none}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:100px;padding:5px 14px;font-size:12px;color:var(--muted);margin-bottom:28px}
+.pill-dot{width:6px;height:6px;background:#4ade80;border-radius:50%;animation:pulse 2s ease-in-out infinite}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(38px,6vw,72px);line-height:1.05;margin-bottom:20px;max-width:700px}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p{font-size:17px;color:var(--muted);max-width:480px;line-height:1.7;margin-bottom:36px}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;border:1px solid var(--border)}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-primary:hover{background:#e55a28;border-color:#e55a28}
+.btn-secondary{background:transparent;color:var(--text)}
+.btn-secondary:hover{background:var(--surface2);border-color:#333}
+
+/* ARENA */
+.arena-wrap{max-width:1100px;margin:0 auto;padding:0 24px 80px}
+.arena-card{background:var(--surface);border:1px solid var(--border);border-radius:28px;overflow:hidden}
+.arena-titlebar{display:flex;align-items:center;gap:8px;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.traffic{display:flex;gap:6px}
+.tl{width:12px;height:12px;border-radius:50%}
+.tl-r{background:#ff5f57}.tl-y{background:#febc2e}.tl-g{background:#28c840}
+.window-title{font-size:13px;color:var(--muted);margin-left:8px}
+.arena-body{padding:32px}
+
+/* HAMSTER STAGE */
+.stage{display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap}
+.hamster-col{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:20px}
+.hamster-container{position:relative;width:220px;height:220px;display:flex;align-items:center;justify-content:center}
+.speech-bubble{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:8px 14px;font-size:13px;color:var(--text);white-space:nowrap;opacity:0;transition:opacity .3s;pointer-events:none;z-index:10;max-width:200px;white-space:normal;text-align:center}
+.speech-bubble.show{opacity:1}
+.speech-bubble::after{content:'';position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);border-left:7px solid transparent;border-right:7px solid transparent;border-top:7px solid var(--border)}
+.speech-bubble::before{content:'';position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);border-left:6px solid transparent;border-right:6px solid transparent;border-top:6px solid var(--surface2);z-index:1}
+.mood-badge{position:absolute;top:4px;right:4px;font-size:20px;transition:all .3s}
+.wheel-wrap{cursor:pointer;opacity:.8;transition:opacity .2s}
+.wheel-wrap:hover{opacity:1}
+.wheel-label{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
+
+/* STATS */
+.stats-col{flex:1;min-width:260px;display:flex;flex-direction:column;gap:16px}
+.stat-card{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:18px 20px}
+.stat-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.stat-num{font-family:'DM Serif Display',serif;font-size:36px;line-height:1;margin-bottom:10px}
+.bar-track{height:6px;background:var(--border);border-radius:100px;overflow:hidden}
+.bar-fill{height:100%;border-radius:100px;transition:width .5s ease}
+.bar-happy{background:var(--accent2)}
+.bar-hunger{background:#4ade80}
+.bar-energy{background:#60a5fa}
+
+/* ACTION BUTTONS */
+.actions{margin-top:24px;display:flex;gap:10px;flex-wrap:wrap}
+.act-btn{flex:1;min-width:80px;padding:12px 8px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:4px}
+.act-btn span.icon{font-size:20px}
+.act-btn:hover{background:var(--surface);border-color:#333;transform:translateY(-1px)}
+.act-btn:active{transform:translateY(0)}
+
+/* ACTIVITY LOG */
+.section{max-width:1100px;margin:0 auto;padding:0 24px 80px}
+.section-header{display:flex;align-items:baseline;gap:12px;margin-bottom:20px}
+.section-title{font-family:'DM Serif Display',serif;font-size:28px}
+.section-count{font-size:13px;color:var(--muted);background:var(--surface2);border:1px solid var(--border);border-radius:100px;padding:3px 10px}
+.log-list{display:flex;flex-direction:column;gap:8px}
+.log-item{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:12px;animation:slideIn .3s ease}
+.log-icon{font-size:18px;flex-shrink:0}
+.log-text{flex:1;font-size:14px}
+.log-time{font-size:12px;color:var(--muted)}
+
+/* FUN FACTS */
+.facts-grid{max-width:1100px;margin:0 auto;padding:0 24px 80px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.fact-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:24px;transition:border-color .2s}
+.fact-card:hover{border-color:#333}
+.fact-icon{font-size:28px;margin-bottom:12px}
+.fact-title{font-family:'DM Serif Display',serif;font-size:19px;margin-bottom:8px}
+.fact-text{font-size:14px;color:var(--muted);line-height:1.6}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:32px 24px;text-align:center}
+footer p{font-size:14px;color:var(--muted)}
+footer a{color:var(--accent);text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 20px;font-size:14px;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* FALLING FOOD */
+.falling-food{position:fixed;pointer-events:none;z-index:500;font-size:24px;animation:dropFall 1.2s ease-in forwards}
+
+/* ANIMATIONS */
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
+@keyframes earWiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-15deg)}75%{transform:rotate(15deg)}}
+@keyframes hamsterBounce{0%,100%{transform:translateY(0)}30%{transform:translateY(-18px)}60%{transform:translateY(-8px)}}
+@keyframes dropFall{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(200px)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+@keyframes wheelSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* ABOUT */
+#about{max-width:1100px;margin:0 auto;padding:0 24px 80px}
+.about-inner{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px;display:grid;grid-template-columns:1fr 1fr;gap:40px}
+@media(max-width:640px){.about-inner{grid-template-columns:1fr}}
+.about-h{font-family:'DM Serif Display',serif;font-size:28px;margin-bottom:12px}
+.about-p{font-size:15px;color:var(--muted);line-height:1.7}
+.kbd{display:inline-block;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:2px 8px;font-size:12px;font-family:monospace;color:var(--text)}
+.shortcuts-list{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.shortcut-row{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="logo" href="#"><span class="logo-dot"></span>Hammy</a>
+    <nav>
+      <a href="#pet">Your Pet</a>
+      <a href="#about">About</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="pet">
+  <div class="hero-bg"></div>
+  <div class="pill"><span class="pill-dot"></span>Live &mdash; Your pet is awake</div>
+  <h1>Meet <em>Hammy</em>.<br>Your web pet.</h1>
+  <p>A tiny virtual hamster living right in your browser. Feed him, pet him, spin his wheel &mdash; and watch his mood change in real time.</p>
+  <div class="cta-row">
+    <button class="btn btn-primary" onclick="scrollToArena()">&#9679; Meet Hammy</button>
+    <button class="btn btn-secondary" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">How it works</button>
+  </div>
+</section>
+
+<div class="arena-wrap">
+  <div class="arena-card" id="arena">
+    <div class="arena-titlebar">
+      <div class="traffic"><div class="tl tl-r"></div><div class="tl tl-y"></div><div class="tl tl-g"></div></div>
+      <span class="window-title">hammy.pet &mdash; virtual habitat</span>
+    </div>
+    <div class="arena-body">
+      <div class="stage">
+        <div class="hamster-col">
+          <div class="hamster-container">
+            <div class="speech-bubble" id="speechBubble">Hello!</div>
+            <div class="mood-badge" id="moodBadge">😊</div>
+            <!-- HAMSTER SVG -->
+            <svg id="hamsterSvg" width="180" height="180" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+              <!-- Shadow -->
+              <ellipse cx="90" cy="162" rx="42" ry="8" fill="rgba(0,0,0,0.25)"/>
+              <!-- Tail -->
+              <path d="M115 130 Q138 125 135 108 Q132 94 120 98" stroke="#c8956b" stroke-width="6" fill="none" stroke-linecap="round"/>
+              <!-- Body -->
+              <ellipse cx="90" cy="120" rx="52" ry="40" fill="#e8b489"/>
+              <!-- Belly -->
+              <ellipse cx="90" cy="126" rx="30" ry="24" fill="#f5d0a4"/>
+              <!-- Left Cheek Pouch -->
+              <ellipse cx="52" cy="108" rx="18" ry="15" fill="#f0c090"/>
+              <!-- Right Cheek Pouch -->
+              <ellipse cx="128" cy="108" rx="18" ry="15" fill="#f0c090"/>
+              <!-- Head -->
+              <ellipse cx="90" cy="88" rx="38" ry="34" fill="#e8b489"/>
+              <!-- Left Ear -->
+              <g id="leftEar">
+                <ellipse cx="62" cy="62" rx="14" ry="16" fill="#e8b489"/>
+                <ellipse cx="62" cy="63" rx="8" ry="10" fill="#f0a0b0"/>
+              </g>
+              <!-- Right Ear -->
+              <g id="rightEar">
+                <ellipse cx="118" cy="62" rx="14" ry="16" fill="#e8b489"/>
+                <ellipse cx="118" cy="63" rx="8" ry="10" fill="#f0a0b0"/>
+              </g>
+              <!-- Left Eye -->
+              <circle cx="75" cy="84" r="8" fill="#1a0a00"/>
+              <circle cx="72" cy="81" r="3" fill="white"/>
+              <circle cx="72" cy="81" r="1.5" fill="rgba(255,255,255,0.9)"/>
+              <!-- Right Eye -->
+              <circle cx="105" cy="84" r="8" fill="#1a0a00"/>
+              <circle cx="102" cy="81" r="3" fill="white"/>
+              <circle cx="102" cy="81" r="1.5" fill="rgba(255,255,255,0.9)"/>
+              <!-- Nose -->
+              <ellipse cx="90" cy="99" rx="5" ry="3.5" fill="#e07090"/>
+              <!-- Whiskers Left -->
+              <line x1="88" y1="99" x2="58" y2="95" stroke="#c8956b" stroke-width="1.2" opacity="0.7"/>
+              <line x1="88" y1="101" x2="56" y2="103" stroke="#c8956b" stroke-width="1.2" opacity="0.7"/>
+              <!-- Whiskers Right -->
+              <line x1="92" y1="99" x2="122" y2="95" stroke="#c8956b" stroke-width="1.2" opacity="0.7"/>
+              <line x1="92" y1="101" x2="124" y2="103" stroke="#c8956b" stroke-width="1.2" opacity="0.7"/>
+              <!-- Left Arm -->
+              <ellipse cx="48" cy="128" rx="10" ry="7" fill="#e8b489" transform="rotate(-30 48 128)"/>
+              <!-- Right Arm -->
+              <ellipse cx="132" cy="128" rx="10" ry="7" fill="#e8b489" transform="rotate(30 132 128)"/>
+              <!-- Left Foot -->
+              <ellipse cx="70" cy="156" rx="14" ry="7" fill="#d4956a"/>
+              <!-- Right Foot -->
+              <ellipse cx="110" cy="156" rx="14" ry="7" fill="#d4956a"/>
+            </svg>
+          </div>
+
+          <div class="wheel-wrap" onclick="runWheel()" title="Click to run! (or press R)">
+            <svg id="wheelSvg" width="100" height="100" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="46" fill="#181818" stroke="#333" stroke-width="2"/>
+              <circle cx="50" cy="50" r="6" fill="#444"/>
+              <g id="wheelSpokes" stroke="#444" stroke-width="3" stroke-linecap="round">
+                <line x1="50" y1="44" x2="50" y2="8"/>
+                <line x1="50" y1="44" x2="50" y2="8" transform="rotate(45 50 50)"/>
+                <line x1="50" y1="44" x2="50" y2="8" transform="rotate(90 50 50)"/>
+                <line x1="50" y1="44" x2="50" y2="8" transform="rotate(135 50 50)"/>
+                <line x1="50" y1="44" x2="50" y2="8" transform="rotate(180 50 50)"/>
+                <line x1="50" y1="44" x2="50" y2="8" transform="rotate(225 50 50)"/>
+                <line x1="50" y1="44" x2="50" y2="8" transform="rotate(270 50 50)"/>
+                <line x1="50" y1="44" x2="50" y2="8" transform="rotate(315 50 50)"/>
+              </g>
+              <circle cx="50" cy="50" r="36" fill="none" stroke="#2a2a2a" stroke-width="2"/>
+            </svg>
+            <div class="wheel-label">Spin wheel (R)</div>
+          </div>
+        </div>
+
+        <div class="stats-col">
+          <div class="stat-card">
+            <div class="stat-label">Happiness</div>
+            <div class="stat-num" id="statHappy" style="color:var(--accent2)">100</div>
+            <div class="bar-track"><div class="bar-fill bar-happy" id="barHappy" style="width:100%"></div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Fullness</div>
+            <div class="stat-num" id="statHunger" style="color:#4ade80">80</div>
+            <div class="bar-track"><div class="bar-fill bar-hunger" id="barHunger" style="width:80%"></div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Energy</div>
+            <div class="stat-num" id="statEnergy" style="color:#60a5fa">90</div>
+            <div class="bar-track"><div class="bar-fill bar-energy" id="barEnergy" style="width:90%"></div></div>
+          </div>
+
+          <div class="actions">
+            <button class="act-btn" onclick="giveSnack()" title="Feed (F)">
+              <span class="icon">&#127803;</span>Feed
+            </button>
+            <button class="act-btn" onclick="petHamster()" title="Pet (P)">
+              <span class="icon">&#129306;</span>Pet
+            </button>
+            <button class="act-btn" onclick="runWheel()" title="Run (R)">
+              <span class="icon">&#9881;</span>Run
+            </button>
+            <button class="act-btn" onclick="giveToy()" title="Play">
+              <span class="icon">&#127934;</span>Play
+            </button>
+            <button class="act-btn" onclick="putToSleep()" title="Sleep">
+              <span class="icon">&#128564;</span>Sleep
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="section-header">
+    <h2 class="section-title">Activity Log</h2>
+    <span class="section-count" id="logCount">0 events</span>
+  </div>
+  <div class="log-list" id="logList">
+    <div class="log-item"><span class="log-icon">&#128057;</span><span class="log-text">Hammy arrived in your browser!</span><span class="log-time">Just now</span></div>
+  </div>
+</section>
+
+<div class="facts-grid">
+  <div class="fact-card">
+    <div class="fact-icon">&#127762;</div>
+    <div class="fact-title">Nocturnal by nature</div>
+    <div class="fact-text">Real hamsters are most active at night. Hammy simulates this with energy decay during the day.</div>
+  </div>
+  <div class="fact-card">
+    <div class="fact-icon">&#9881;</div>
+    <div class="fact-title">Running machines</div>
+    <div class="fact-text">Hamsters can run up to 8 miles per night on their wheel. That&#39;s dedication.</div>
+  </div>
+  <div class="fact-card">
+    <div class="fact-icon">&#128057;</div>
+    <div class="fact-title">Cheek pouches</div>
+    <div class="fact-text">A hamster&#39;s cheeks can hold food equal to their entire body size. Hammy agrees this is impressive.</div>
+  </div>
+  <div class="fact-card">
+    <div class="fact-icon">&#128149;</div>
+    <div class="fact-title">Social souls</div>
+    <div class="fact-text">Though solitary in the wild, hamsters are highly responsive to their owners. Hammy loves your attention.</div>
+  </div>
+</div>
+
+<section id="about">
+  <div class="about-inner">
+    <div>
+      <h3 class="about-h">About Hammy</h3>
+      <p class="about-p">Hammy is a fully client-side virtual pet. No server, no account &mdash; just you and your hamster. His state is saved to localStorage so he persists between visits. His hunger and happiness decay over time, so check in on him!</p>
+    </div>
+    <div>
+      <h3 class="about-h">Keyboard shortcuts</h3>
+      <div class="shortcuts-list">
+        <div class="shortcut-row"><kbd class="kbd">F</kbd> Feed Hammy a sunflower seed</div>
+        <div class="shortcut-row"><kbd class="kbd">P</kbd> Pet Hammy</div>
+        <div class="shortcut-row"><kbd class="kbd">R</kbd> Start / stop running wheel</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Hammy lives in your browser &mdash; built with love &amp; vanilla JS &nbsp;&#183;&nbsp; <a href="https://github.com/arezoyetoo-dotcom/hamster" target="_blank" rel="noopener">View on GitHub</a></p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'hammy_v2';
+const SAYINGS = [
+  'Squeak squeak! 🐾',
+  'More seeds, please! 🌻',
+  'I love you this much! 🤗',
+  'Wheeeee! 🎡',
+  'Did someone say snacks?',
+  'You are my favourite human!',
+  'I am stuffing my cheeks!',
+  'Nap time was great!',
+  'Life is good right here.',
+  'You make me so happy! 💛'
+];
+const MOODS = {
+  happy:   { emoji:'😊', label:'happy' },
+  excited: { emoji:'🤩', label:'excited' },
+  sleepy:  { emoji:'😴', label:'sleepy' },
+  hungry:  { emoji:'😤', label:'hungry' },
+  loved:   { emoji:'🥰', label:'loved' },
+  running: { emoji:'🏃', label:'running' }
+};
+
+let state = {
+  happy:100, hunger:80, energy:90,
+  totalPets:0, totalFeeds:0, totalRuns:0,
+  mood:'happy'
+};
+
+function loadState(){
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if(s) Object.assign(state, JSON.parse(s));
+  } catch(e){}
+}
+
+function saveState(){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){}
+}
+
+function clamp(v,min=0,max=100){ return Math.max(min, Math.min(max, v)); }
+
+function updateBars(){
+  state.happy  = clamp(state.happy);
+  state.hunger = clamp(state.hunger);
+  state.energy = clamp(state.energy);
+
+  document.getElementById('statHappy').textContent  = Math.round(state.happy);
+  document.getElementById('statHunger').textContent = Math.round(state.hunger);
+  document.getElementById('statEnergy').textContent = Math.round(state.energy);
+  document.getElementById('barHappy').style.width   = state.happy  + '%';
+  document.getElementById('barHunger').style.width  = state.hunger + '%';
+  document.getElementById('barEnergy').style.width  = state.energy + '%';
+
+  let mood = 'happy';
+  if(isRunning) mood = 'running';
+  else if(state.energy < 20) mood = 'sleepy';
+  else if(state.hunger < 25) mood = 'hungry';
+  else if(state.happy > 90)  mood = 'excited';
+  else if(state.totalPets > 5 && state.happy > 70) mood = 'loved';
+  state.mood = mood;
+  document.getElementById('moodBadge').textContent = MOODS[mood].emoji;
+  saveState();
+}
+
+function showBubble(text){
+  const b = document.getElementById('speechBubble');
+  b.textContent = text;
+  b.classList.add('show');
+  clearTimeout(b._t);
+  b._t = setTimeout(() => b.classList.remove('show'), 3000);
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+const logEl = document.getElementById('logList');
+const logCountEl = document.getElementById('logCount');
+let logEntries = [];
+
+function addLog(icon, text){
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+  logEntries.unshift({icon, text, time: timeStr});
+  if(logEntries.length > 20) logEntries.pop();
+  renderLog();
+}
+
+function renderLog(){
+  logEl.innerHTML = logEntries.map(e =>
+    `<div class="log-item"><span class="log-icon">${e.icon}</span><span class="log-text">${e.text}</span><span class="log-time">${e.time}</span></div>`
+  ).join('');
+  const n = logEntries.length;
+  logCountEl.textContent = n + ' event' + (n===1?'':'s');
+}
+
+/* PET */
+function petHamster(){
+  state.happy = clamp(state.happy + 12);
+  state.totalPets++;
+  const svg = document.getElementById('hamsterSvg');
+  svg.style.animation = 'none';
+  svg.offsetHeight;
+  const leftEar  = document.getElementById('leftEar');
+  const rightEar = document.getElementById('rightEar');
+  leftEar.style.animation  = 'earWiggle .5s ease 3';
+  rightEar.style.animation = 'earWiggle .5s ease 3';
+  setTimeout(() => { leftEar.style.animation=''; rightEar.style.animation=''; }, 1600);
+  const saying = SAYINGS[Math.floor(Math.random() * SAYINGS.length)];
+  showBubble(saying);
+  addLog('🤚', 'You petted Hammy — he loved it!');
+  showToast('Hammy feels loved! +12 happiness');
+  updateBars();
+}
+
+/* SNACK */
+function giveSnack(){
+  state.hunger = clamp(state.hunger + 18);
+  state.happy  = clamp(state.happy + 8);
+  state.totalFeeds++;
+  spawnFood();
+  showBubble('Nom nom nom! 🌻');
+  addLog('🌻', 'You gave Hammy a sunflower seed');
+  showToast('Hammy munches happily! +18 fullness');
+  updateBars();
+}
+
+function spawnFood(){
+  const el = document.createElement('div');
+  el.className = 'falling-food';
+  el.textContent = ['🌻','🥜','🫐','🥕','🌽'][Math.floor(Math.random()*5)];
+  el.style.left = (30 + Math.random() * 40) + 'vw';
+  el.style.top  = '30vh';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1400);
+}
+
+/* RUN */
+let isRunning = false;
+let runRaf = null;
+let wheelAngle = 0;
+
+function runWheel(){
+  if(isRunning){ stopWheel(); return; }
+  if(state.energy <= 5){ showToast('Hammy is too tired to run! 😴'); return; }
+  isRunning = true;
+  state.totalRuns++;
+  showBubble('Wheeeee! 🎡');
+  addLog('⚙️', 'Hammy jumps on the wheel');
+  updateBars();
+  spinLoop();
+}
+
+function spinLoop(){
+  if(!isRunning || state.energy <= 5){
+    stopWheel();
+    return;
+  }
+  wheelAngle += 6;
+  document.getElementById('wheelSpokes').style.transform = `rotate(${wheelAngle}deg)`;
+  document.getElementById('wheelSpokes').style.transformOrigin = '50px 50px';
+  state.energy = clamp(state.energy - 0.3);
+  state.happy  = clamp(state.happy  + 0.2);
+  updateBars();
+  runRaf = requestAnimationFrame(spinLoop);
+}
+
+function stopWheel(){
+  isRunning = false;
+  cancelAnimationFrame(runRaf);
+  document.getElementById('wheelSpokes').style.transform = '';
+  showBubble('That was fun! 😊');
+  addLog('⚙️', 'Hammy finished running');
+  showToast('Hammy hops off the wheel');
+  updateBars();
+}
+
+/* PLAY */
+function giveToy(){
+  state.happy  = clamp(state.happy + 10);
+  state.energy = clamp(state.energy - 5);
+  const svg = document.getElementById('hamsterSvg');
+  svg.style.animation = 'hamsterBounce .6s ease 2';
+  setTimeout(() => { svg.style.animation = ''; }, 1300);
+  showBubble('Play time! 🎾');
+  addLog('🎾', 'Hammy plays with his toy');
+  showToast('Hammy is having a blast! +10 happiness');
+  updateBars();
+}
+
+/* SLEEP */
+function putToSleep(){
+  if(state.energy >= 95){ showToast('Hammy is already full of energy!'); return; }
+  const deficit = 100 - state.energy;
+  state.energy = clamp(state.energy + deficit * 0.8);
+  showBubble('Zzz... 😴');
+  addLog('😴', 'Hammy curls up for a nap');
+  showToast('Hammy is napping... 😴');
+  updateBars();
+  setTimeout(() => {
+    showBubble('Good morning! 😊');
+    addLog('🌅', 'Hammy wakes up refreshed!');
+    showToast('Hammy woke up refreshed!');
+  }, 3000);
+}
+
+/* DECAY */
+setInterval(() => {
+  state.hunger = clamp(state.hunger - 3);
+  state.happy  = clamp(state.happy  - 2);
+  updateBars();
+  if(state.hunger < 20) showToast('Hammy is getting hungry! 😤');
+  if(state.happy  < 20) showToast('Hammy seems sad... 🥺');
+}, 30000);
+
+/* KEYBOARD */
+document.addEventListener('keydown', e => {
+  if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  switch(e.key.toUpperCase()){
+    case 'F': giveSnack();    break;
+    case 'P': petHamster();   break;
+    case 'R': runWheel();     break;
+  }
+});
+
+function scrollToArena(){
+  document.getElementById('arena').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+/* INIT */
+loadState();
+updateBars();
+addLog('🐹', 'Hammy arrived in your browser!');
+setTimeout(() => showBubble('Hi there! I am Hammy! 👋'), 800);
+</script>
+</body>
+</html>
