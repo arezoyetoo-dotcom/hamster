@@ -621,17 +621,194 @@ header {
   cursor: grabbing;
 }
 
+/* WHEEL & RUNNING STYLES */
+.wheel-wind-fx {
+  position: absolute;
+  inset: -6px;
+  pointer-events: none;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  overflow: hidden;
+}
+.wheel-running .wheel-wind-fx {
+  opacity: 1;
+}
+.wind-trail {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px dashed rgba(255, 120, 73, 0.45);
+  inset: 6px;
+  animation: windSpin 0.35s linear infinite;
+}
+.wind-trail-2 {
+  inset: 18px;
+  border-color: rgba(255, 255, 255, 0.25);
+  animation-duration: 0.25s;
+  animation-direction: reverse;
+}
+@keyframes windSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.wheel-dust-fx {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 70px;
+  height: 50px;
+  pointer-events: none;
+  z-index: 15;
+}
+.wheel-dust-particle {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #f8c291 30%, rgba(229, 142, 38, 0.6) 80%);
+  box-shadow: 0 0 6px rgba(255, 120, 73, 0.5);
+  animation: dustFly 0.45s ease-out forwards;
+}
+@keyframes dustFly {
+  0% { transform: translate(0, 0) scale(0.6); opacity: 0.9; }
+  100% { transform: translate(-28px, -18px) scale(1.6); opacity: 0; }
+}
+
+/* HAMSTER IN-WHEEL (DYNAMIC RUNNING ANIMATION) */
 .hamster-actor.in-wheel {
   left: auto;
   right: 50px;
   bottom: 65px;
-  transform: scale(0.65);
+  transform: scale(0.65) rotate(-8deg);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.hamster-actor.in-wheel .hamster-body-group {
+  animation: runningBodyBob 0.18s infinite alternate cubic-bezier(0.45, 0.05, 0.55, 0.95);
+  transform-origin: 110px 145px;
+}
+@keyframes runningBodyBob {
+  0% { transform: translateY(0) rotate(-2deg); }
+  100% { transform: translateY(-7px) rotate(4deg); }
+}
+
+/* Pedaling Front Paws */
+.hamster-actor.in-wheel .paw-left {
+  transform-origin: 88px 145px;
+  animation: runPawL 0.18s infinite linear;
+}
+.hamster-actor.in-wheel .paw-right {
+  transform-origin: 132px 145px;
+  animation: runPawR 0.18s infinite linear;
+}
+@keyframes runPawL {
+  0% { transform: rotate(-50deg) translateY(-8px) scaleY(0.85); }
+  50% { transform: rotate(35deg) translateY(6px) scaleY(1.15); }
+  100% { transform: rotate(-50deg) translateY(-8px) scaleY(0.85); }
+}
+@keyframes runPawR {
+  0% { transform: rotate(35deg) translateY(6px) scaleY(1.15); }
+  50% { transform: rotate(-50deg) translateY(-8px) scaleY(0.85); }
+  100% { transform: rotate(35deg) translateY(6px) scaleY(1.15); }
+}
+
+/* Pedaling Back Feet */
+.hamster-actor.in-wheel .foot-left {
+  transform-origin: 78px 185px;
+  animation: runFootL 0.18s infinite linear;
+}
+.hamster-actor.in-wheel .foot-right {
+  transform-origin: 142px 185px;
+  animation: runFootR 0.18s infinite linear;
+}
+@keyframes runFootL {
+  0% { transform: rotate(25deg) translateY(5px); }
+  50% { transform: rotate(-35deg) translateY(-7px); }
+  100% { transform: rotate(25deg) translateY(5px); }
+}
+@keyframes runFootR {
+  0% { transform: rotate(-35deg) translateY(-7px); }
+  50% { transform: rotate(25deg) translateY(5px); }
+  100% { transform: rotate(-35deg) translateY(-7px); }
+}
+
+/* Aerodynamic Pinned Ears */
+.hamster-actor.in-wheel .ear-left {
+  transform: rotate(-35deg) translateY(5px) scale(0.92);
+}
+.hamster-actor.in-wheel .ear-right {
+  transform: rotate(35deg) translateY(5px) scale(0.92);
+}
+
+/* HAMSTER IN-BED (DYNAMIC SLEEPING ANIMATION) */
 .hamster-actor.in-bed {
   left: 80px;
   bottom: 48px;
-  transform: scale(0.7);
+  transform: scale(0.72) rotate(-6deg);
+  transition: transform 0.4s ease;
+}
+
+.hamster-actor.in-bed .hamster-body-group {
+  animation: sleepBreathe 4.2s infinite ease-in-out;
+  transform-origin: 110px 145px;
+}
+@keyframes sleepBreathe {
+  0%, 100% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.04, 0.96) translateY(2.5px); }
+}
+
+.hamster-actor.in-bed .open-eyes {
+  opacity: 0 !important;
+  transition: opacity 0.3s ease;
+}
+.hamster-actor.in-bed .sleeping-eyes {
+  opacity: 1 !important;
+  transition: opacity 0.3s ease;
+}
+.hamster-actor.in-bed .bed-quilt {
+  opacity: 1 !important;
+  transition: opacity 0.4s ease;
+}
+.hamster-actor.in-bed .ear-left {
+  transform: rotate(-14deg) translateY(2px);
+}
+.hamster-actor.in-bed .ear-right {
+  transform: rotate(14deg) translateY(2px);
+}
+.hamster-actor.in-bed .paw-left {
+  transform: rotate(-5deg) translateY(5px) scale(0.9);
+}
+.hamster-actor.in-bed .paw-right {
+  transform: rotate(5deg) translateY(5px) scale(0.9);
+}
+
+/* FLOATING ZZZ PARTICLES */
+.sleep-zzz-container {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  width: 120px;
+  height: 120px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 35;
+}
+.zzz-particle {
+  position: absolute;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  color: #fef08a;
+  text-shadow: 0 0 10px rgba(254, 240, 138, 0.8), 0 0 18px rgba(245, 158, 11, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  animation: floatZzzAnim 3.2s cubic-bezier(0.2, 0.6, 0.3, 1) forwards;
+}
+@keyframes floatZzzAnim {
+  0% { transform: translateY(20px) translateX(0) scale(0.5); opacity: 0; }
+  15% { opacity: 0.95; }
+  75% { opacity: 0.85; }
+  100% { transform: translateY(-75px) translateX(30px) scale(1.3); opacity: 0; }
 }
 
 /* Hamster Floating Speech Bubble */
@@ -1859,6 +2036,11 @@ footer a:hover {
           </g>
           <circle cx="75" cy="75" r="4" fill="var(--accent)"/>
         </svg>
+        <div class="wheel-wind-fx" id="wheelWindFx">
+          <div class="wind-trail"></div>
+          <div class="wind-trail wind-trail-2"></div>
+        </div>
+        <div class="wheel-dust-fx" id="wheelDustFx"></div>
         <div class="wheel-speed-tag" id="odometerTag">0.0 m Run</div>
       </div>
 
@@ -1874,6 +2056,9 @@ footer a:hover {
         <div class="mood-indicator" id="moodBadgeTag">
           ( ˘ ɜ ˘ ) Fluffy
         </div>
+
+        <!-- Floating Zzz Sleep Particles Container -->
+        <div class="sleep-zzz-container" id="sleepZzzContainer"></div>
 
         <!-- Master SVG Character Model -->
         <svg class="hamster-svg" id="hammyMasterSvg" viewBox="0 0 220 220">
@@ -1896,9 +2081,9 @@ footer a:hover {
           <!-- Hamster Body Group with Breathing Animation -->
           <g class="hamster-body-group" id="hamsterBodyGroup">
             
-            <!-- Tiny Feet -->
-            <ellipse cx="78" cy="188" rx="16" ry="9" fill="#f8a5c2"/>
-            <ellipse cx="142" cy="188" rx="16" ry="9" fill="#f8a5c2"/>
+            <!-- Tiny Feet (Back Legs for Running) -->
+            <ellipse class="hamster-foot foot-left" id="footLeft" cx="78" cy="188" rx="16" ry="9" fill="#f8a5c2"/>
+            <ellipse class="hamster-foot foot-right" id="footRight" cx="142" cy="188" rx="16" ry="9" fill="#f8a5c2"/>
 
             <!-- Fluffy Plump Body -->
             <ellipse cx="110" cy="142" rx="66" ry="54" fill="url(#bodyFurGrad)"/>
@@ -1919,11 +2104,11 @@ footer a:hover {
 
             <!-- Ears with Twitch Animation -->
             <g id="earsGroup">
-              <g class="ear-left">
+              <g class="ear-left" id="earLeft">
                 <ellipse cx="74" cy="58" rx="17" ry="20" fill="#e58e26"/>
                 <ellipse cx="74" cy="60" rx="11" ry="14" fill="url(#pinkEarGrad)"/>
               </g>
-              <g class="ear-right">
+              <g class="ear-right" id="earRight">
                 <ellipse cx="146" cy="58" rx="17" ry="20" fill="#e58e26"/>
                 <ellipse cx="146" cy="60" rx="11" ry="14" fill="url(#pinkEarGrad)"/>
               </g>
@@ -1931,17 +2116,31 @@ footer a:hover {
 
             <!-- Eyes & Interactive Pupils with Gaze Tracking -->
             <g id="eyesCluster">
-              <circle cx="86" cy="98" r="11" fill="#18181b"/>
-              <circle class="eye-pupil" id="leftPupil" cx="86" cy="98" r="6" fill="#000000"/>
-              <circle cx="88" cy="95" r="3.5" fill="#ffffff"/>
-              <circle cx="84" cy="100" r="1.5" fill="#ffffff"/>
-              <ellipse class="eye-lid" id="leftEyeLid" cx="86" cy="98" rx="12" ry="12" fill="#f8c291" opacity="0"/>
+              <!-- Open / Awake Eyes -->
+              <g id="openEyesGroup" class="open-eyes" style="transition: opacity 0.3s ease;">
+                <circle cx="86" cy="98" r="11" fill="#18181b"/>
+                <circle class="eye-pupil" id="leftPupil" cx="86" cy="98" r="6" fill="#000000"/>
+                <circle cx="88" cy="95" r="3.5" fill="#ffffff"/>
+                <circle cx="84" cy="100" r="1.5" fill="#ffffff"/>
+                <ellipse class="eye-lid" id="leftEyeLid" cx="86" cy="98" rx="12" ry="12" fill="#f8c291" opacity="0"/>
 
-              <circle cx="134" cy="98" r="11" fill="#18181b"/>
-              <circle class="eye-pupil" id="rightPupil" cx="134" cy="98" r="6" fill="#000000"/>
-              <circle cx="136" cy="95" r="3.5" fill="#ffffff"/>
-              <circle cx="132" cy="100" r="1.5" fill="#ffffff"/>
-              <ellipse class="eye-lid" id="rightEyeLid" cx="134" cy="98" rx="12" ry="12" fill="#f8c291" opacity="0"/>
+                <circle cx="134" cy="98" r="11" fill="#18181b"/>
+                <circle class="eye-pupil" id="rightPupil" cx="134" cy="98" r="6" fill="#000000"/>
+                <circle cx="136" cy="95" r="3.5" fill="#ffffff"/>
+                <circle cx="132" cy="100" r="1.5" fill="#ffffff"/>
+                <ellipse class="eye-lid" id="rightEyeLid" cx="134" cy="98" rx="12" ry="12" fill="#f8c291" opacity="0"/>
+              </g>
+
+              <!-- Sweet Sleeping Closed Eyes (Visible when asleep) -->
+              <g id="sleepingEyesGroup" class="sleeping-eyes" opacity="0" style="transition: opacity 0.3s ease;">
+                <path d="M74 97 Q86 106 98 97" fill="none" stroke="#63524b" stroke-width="2.8" stroke-linecap="round"/>
+                <path d="M73 99 L70 103" stroke="#63524b" stroke-width="2" stroke-linecap="round"/>
+                <path d="M99 99 L102 103" stroke="#63524b" stroke-width="2" stroke-linecap="round"/>
+                
+                <path d="M122 97 Q134 106 146 97" fill="none" stroke="#63524b" stroke-width="2.8" stroke-linecap="round"/>
+                <path d="M121 99 L118 103" stroke="#63524b" stroke-width="2" stroke-linecap="round"/>
+                <path d="M147 99 L150 103" stroke="#63524b" stroke-width="2" stroke-linecap="round"/>
+              </g>
             </g>
 
             <!-- Whiskers Left -->
@@ -1959,11 +2158,17 @@ footer a:hover {
             <!-- Cute W-Mouth -->
             <path id="mouthLine" d="M102 121 Q110 126 110 121 Q110 126 118 121" fill="none" stroke="#63524b" stroke-width="2.5" stroke-linecap="round"/>
 
-            <!-- Paws -->
-            <ellipse id="pawLeft" cx="88" cy="152" rx="9" ry="12" fill="#f8a5c2" transform="rotate(-15 88 152)"/>
-            <ellipse id="pawRight" cx="132" cy="152" rx="9" ry="12" fill="#f8a5c2" transform="rotate(15 132 152)"/>
+            <!-- Paws (Front Legs for Running & Grooming) -->
+            <ellipse id="pawLeft" class="hamster-paw paw-left" cx="88" cy="152" rx="9" ry="12" fill="#f8a5c2" transform="rotate(-15 88 152)"/>
+            <ellipse id="pawRight" class="hamster-paw paw-right" cx="132" cy="152" rx="9" ry="12" fill="#f8a5c2" transform="rotate(15 132 152)"/>
 
             <g id="costumeSlot"></g>
+
+            <!-- Cozy Bedding Leaves / Quilt overlay for Sleep -->
+            <g id="bedQuiltGroup" class="bed-quilt" opacity="0" style="transition: opacity 0.4s ease;">
+              <path d="M52 165 Q110 148 168 165 Q178 198 164 212 Q110 216 56 212 Z" fill="#d97706" opacity="0.9" stroke="#b45309" stroke-width="2"/>
+              <text x="110" y="195" text-anchor="middle" font-size="15" opacity="0.85">🍂 🍂</text>
+            </g>
           </g>
         </svg>
 
@@ -2141,6 +2346,20 @@ footer a:hover {
         <div style="display:flex; align-items:center; gap:10px; margin-top:8px;">
           <button type="button" class="chat-tool-btn" id="btnTestApi" onclick="testHammyConnection()">⚡ Test API Connection</button>
           <span id="testApiStatus" style="font-size:12px; color:var(--text-muted);"></span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <label>Cute Voice Style:</label>
+        <select id="hammyVoiceStyle" onchange="saveChatSettings()">
+          <option value="babble" selected>🐹 Animal Crossing Chatter (Super Cute Procedural Squeaks!)</option>
+          <option value="hybrid">✨ Hybrid: Excited Squeaks + High-Pitch Speech</option>
+          <option value="tts">🗣️ Cute Chipmunk Speech (TTS)</option>
+        </select>
+        <div style="display:flex; align-items:center; gap:10px; margin-top:8px; flex-wrap:wrap;">
+          <button type="button" class="chat-tool-btn" id="btnTestVoice" onclick="testHammyVoicePreview()">🔊 Test Cute Voice</button>
+          <label style="font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+            Pitch: <input type="range" id="voicePitchSlider" min="1.4" max="2.0" step="0.05" value="1.95" onchange="saveChatSettings()" style="width: 75px;">
+          </label>
         </div>
       </div>
     </div>
@@ -2389,6 +2608,54 @@ class HamsterSoundFX {
     gain.connect(this.ctx.destination);
     osc.start(t);
     osc.stop(t + 0.1);
+  }
+
+  playSleepPurr() {
+    if (!this.enabled) return;
+    this.init();
+    const t = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(210, t);
+    osc.frequency.linearRampToValueAtTime(290, t + 0.6);
+    osc.frequency.linearRampToValueAtTime(190, t + 1.2);
+
+    gain.gain.setValueAtTime(0.001, t);
+    gain.gain.linearRampToValueAtTime(0.04, t + 0.5);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 1.2);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(t);
+    osc.stop(t + 1.2);
+  }
+
+  playFootPatter() {
+    if (!this.enabled) return;
+    this.init();
+    const t = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'triangle';
+    const freq = 450 + Math.random() * 150;
+    osc.frequency.setValueAtTime(freq, t);
+    osc.frequency.exponentialRampToValueAtTime(freq * 0.45, t + 0.035);
+
+    gain.gain.setValueAtTime(0.03, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.035);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(t);
+    osc.stop(t + 0.035);
+  }
+
+  playHappyRunningSqueak() {
+    if (!this.enabled) return;
+    this.playSqueak(1500 + Math.random() * 400, 0.08);
   }
 }
 
@@ -2704,6 +2971,19 @@ function drinkWater() {
 
 let wheelAngle = 0;
 let wheelRaf = null;
+let wheelWrapEl = null;
+let lastPatterTime = 0;
+
+function spawnWheelDust() {
+  const dustWrap = document.getElementById('wheelDustFx');
+  if (!dustWrap) return;
+  const dust = document.createElement('div');
+  dust.className = 'wheel-dust-particle';
+  dust.style.left = (15 + Math.random() * 25) + 'px';
+  dust.style.bottom = (10 + Math.random() * 15) + 'px';
+  dustWrap.appendChild(dust);
+  setTimeout(() => dust.remove(), 450);
+}
 
 function toggleWheelRun() {
   if (state.isSleeping) wakeUp();
@@ -2722,26 +3002,39 @@ function startWheelRun() {
     return;
   }
 
+  if (!wheelWrapEl) wheelWrapEl = document.getElementById('wheelWrap');
   state.isRunning = true;
   actor.classList.add('in-wheel');
+  if (wheelWrapEl) wheelWrapEl.classList.add('wheel-running');
+
   speak('Wheeeeee! Zoomies engaged! 🚀');
   addJournalEntry('⚙️', 'Hopped onto the running wheel.');
   showToast('Hammy is running like the wind!');
 
-  let speed = 9;
-  function runLoop() {
+  let speed = 9.5;
+  lastPatterTime = performance.now();
+
+  function runLoop(now) {
     if (!state.isRunning) return;
     wheelAngle = (wheelAngle + speed) % 360;
     wheelSpokeGroup.setAttribute('transform', 'rotate(' + wheelAngle + ' 75 75)');
 
-    state.totalDistance += 0.2;
+    state.totalDistance += 0.22;
     odometerTag.textContent = state.totalDistance.toFixed(1) + ' m Run';
 
-    state.energy = Math.max(0, state.energy - 0.15);
-    state.happy = Math.min(100, state.happy + 0.1);
+    state.energy = Math.max(0, state.energy - 0.14);
+    state.happy = Math.min(100, state.happy + 0.12);
     state.hunger = Math.max(0, state.hunger - 0.08);
 
-    if (Math.random() < 0.08) sfx.playWheelHum();
+    // Dynamic foot patter & dust particles
+    if (now - lastPatterTime > 160) {
+      sfx.playFootPatter();
+      lastPatterTime = now;
+      if (Math.random() < 0.6) spawnWheelDust();
+      if (Math.random() < 0.04) sfx.playHappyRunningSqueak();
+    }
+
+    if (Math.random() < 0.06) sfx.playWheelHum();
 
     if (state.energy <= 5) {
       stopWheelRun();
@@ -2759,6 +3052,7 @@ function stopWheelRun() {
   state.isRunning = false;
   cancelAnimationFrame(wheelRaf);
   actor.classList.remove('in-wheel');
+  if (wheelWrapEl) wheelWrapEl.classList.remove('wheel-running');
   showToast('Hammy hops off the wheel.');
   updateUI();
 }
@@ -2774,20 +3068,61 @@ function groomHammy() {
   updateUI();
 }
 
+/* SLEEPING PARTICLES & COZY PURR SYSTEM */
+let sleepZzzTimer = null;
+let sleepPurrTimer = null;
+
+function startSleepZzz() {
+  stopSleepZzz();
+  const container = document.getElementById('sleepZzzContainer');
+  if (!container) return;
+
+  function spawnZ() {
+    if (!state.isSleeping) return;
+    const z = document.createElement('div');
+    z.className = 'zzz-particle';
+    const chars = ['z', 'Z', '💤', 'Zzz', '✨'];
+    z.textContent = chars[Math.floor(Math.random() * chars.length)];
+    const size = 13 + Math.random() * 12;
+    z.style.fontSize = size + 'px';
+    z.style.left = (48 + (Math.random() * 20 - 10)) + '%';
+    z.style.top = '25px';
+    container.appendChild(z);
+    setTimeout(() => z.remove(), 3200);
+  }
+
+  spawnZ();
+  sleepZzzTimer = setInterval(spawnZ, 850);
+
+  // Soft cozy sleep purr
+  sfx.playSleepPurr();
+  sleepPurrTimer = setInterval(() => {
+    if (state.isSleeping) sfx.playSleepPurr();
+  }, 4400);
+}
+
+function stopSleepZzz() {
+  if (sleepZzzTimer) clearInterval(sleepZzzTimer);
+  if (sleepPurrTimer) clearInterval(sleepPurrTimer);
+  sleepZzzTimer = null;
+  sleepPurrTimer = null;
+  const container = document.getElementById('sleepZzzContainer');
+  if (container) container.innerHTML = '';
+}
+
 function tuckInBed() {
   if (state.isRunning) stopWheelRun();
   state.isSleeping = true;
   actor.classList.add('in-bed');
-  leftEyeLid.style.opacity = '1';
-  rightEyeLid.style.opacity = '1';
-  actor.classList.add('squinting');
 
-  sfx.playSqueak(800, 0.3);
+  startSleepZzz();
+
+  sfx.playSqueak(750, 0.25);
   speak('Zzz... dreaming of endless sunflower seeds... 🌙');
-  addJournalEntry('🍂', 'Curled up in bedding for a nap.');
+  addJournalEntry('🍂', 'Curled up peacefully in bedding for a nap.');
   showToast('Hammy is having a sweet snooze 😴');
 
-  statusBadge.textContent = '● Snoozing Warmly';
+  statusBadge.textContent = '● Deep Dreamland (Zzz...)';
   statusBadge.style.color = '#f59e0b';
 }
 
@@ -2795,11 +3130,12 @@ function wakeUp() {
   if (!state.isSleeping) return;
   state.isSleeping = false;
   actor.classList.remove('in-bed');
-  actor.classList.remove('squinting');
-  leftEyeLid.style.opacity = '0';
-  rightEyeLid.style.opacity = '0';
+  stopSleepZzz();
+
   state.energy = 100;
-  sfx.playSqueak(1300, 0.15);
+  sfx.playSqueak(1350, 0.15);
+  setTimeout(() => sfx.playSqueak(1650, 0.12), 100);
+
   speak('Good morning! Wide awake! 🌞');
   addJournalEntry('🌅', 'Hammy woke up fully energized!');
   showToast('Hammy woke up completely refreshed!');
@@ -2986,7 +3322,93 @@ const HAMMY_DEFAULT_MODEL = "gemini-3.6-flash";
 
 let chatHistory = [];
 let isHammyTyping = false;
+/* PROCEDURAL ANIMAL CROSSING CUTE VOICE BABBLER */
+class HammyVoiceBabbler {
+  constructor() {
+    this.isBabbling = false;
+    this.cancelBabble = false;
+  }
+
+  async babbleText(text, onSyllable) {
+    if (!sfx.enabled) return;
+    sfx.init();
+    this.isBabbling = true;
+    this.cancelBabble = false;
+
+    // Clean up text
+    const clean = text
+      .replace(/\*[^*]*\*/g, '')
+      .replace(/\[ACTION:[^\]]*\]/g, '')
+      .replace(/[\u{1F300}-\u{1FAFF}]/gu, '')
+      .trim();
+
+    if (!clean) return;
+
+    // Break into tokens (words / punctuation)
+    const tokens = clean.match(/[\w\u0600-\u06FF']+|[?!.,]/g) || [clean];
+    const maxTokens = Math.min(tokens.length, 40); // Keep snappy
+
+    for (let i = 0; i < maxTokens; i++) {
+      if (this.cancelBabble) break;
+      const token = tokens[i];
+
+      let baseFreq = 1420 + (token.charCodeAt(0) % 8) * 85; // 1420 - 2015 Hz
+      let duration = 0.065;
+      let type = 'sine';
+
+      if (token === '?' || token.includes('?')) {
+        this.playChirp(baseFreq * 0.9, baseFreq * 1.55, 0.13, 'triangle');
+        duration = 0.14;
+      } else if (token === '!' || token.includes('!')) {
+        this.playChirp(baseFreq * 1.15, baseFreq * 1.7, 0.095, 'sine');
+        duration = 0.11;
+      } else if (token === '.' || token === '،' || token === ',') {
+        await new Promise(r => setTimeout(r, 90));
+        continue;
+      } else {
+        const endFreq = baseFreq * (1 + (Math.random() * 0.35 - 0.15));
+        this.playChirp(baseFreq, endFreq, 0.058, Math.random() > 0.4 ? 'sine' : 'triangle');
+      }
+
+      if (onSyllable) onSyllable(i, token);
+      await new Promise(r => setTimeout(r, 62));
+    }
+
+    this.isBabbling = false;
+  }
+
+  playChirp(fStart, fEnd, duration, type = 'sine') {
+    if (!sfx.enabled || !sfx.ctx) return;
+    const t = sfx.ctx.currentTime;
+    const osc = sfx.ctx.createOscillator();
+    const gain = sfx.ctx.createGain();
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(fStart, t);
+    osc.frequency.exponentialRampToValueAtTime(Math.max(250, fEnd), t + duration);
+
+    gain.gain.setValueAtTime(0.001, t);
+    gain.gain.linearRampToValueAtTime(0.15, t + 0.012);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+
+    osc.connect(gain);
+    gain.connect(sfx.ctx.destination);
+
+    osc.start(t);
+    osc.stop(t + duration);
+  }
+
+  stop() {
+    this.cancelBabble = true;
+    this.isBabbling = false;
+  }
+}
+
+const hammyBabbler = new HammyVoiceBabbler();
+
 let voiceEnabled = true;
+let hammyVoiceStyle = 'babble';
+let hammyVoicePitch = 1.95;
 
 const HAMMY_SYSTEM_INSTRUCTION = `You are Hammy, the world's most adorable, fluffy, and cheerful dwarf hamster who lives inside this cozy interactive browser burrow.
 You are chatting with your favorite human friend.
@@ -3020,6 +3442,18 @@ function initHammyChat() {
     voiceEnabled = savedVoice === 'true';
     updateVoiceButtonUI();
   }
+  const savedStyle = localStorage.getItem('hammy_voice_style');
+  if (savedStyle) {
+    hammyVoiceStyle = savedStyle;
+    const styleSel = document.getElementById('hammyVoiceStyle');
+    if (styleSel) styleSel.value = savedStyle;
+  }
+  const savedPitch = localStorage.getItem('hammy_voice_pitch');
+  if (savedPitch) {
+    hammyVoicePitch = parseFloat(savedPitch);
+    const pitchSlider = document.getElementById('voicePitchSlider');
+    if (pitchSlider) pitchSlider.value = savedPitch;
+  }
 
   if (apiKeyInput) {
     apiKeyInput.addEventListener('input', saveChatSettings);
@@ -3029,8 +3463,20 @@ function initHammyChat() {
 function saveChatSettings() {
   const apiKeyInput = document.getElementById('geminiChatApiKey');
   const modelSelect = document.getElementById('geminiChatModel');
+  const styleSel = document.getElementById('hammyVoiceStyle');
+  const pitchSlider = document.getElementById('voicePitchSlider');
+
   if (apiKeyInput) localStorage.setItem('hammy_gemini_api_key', apiKeyInput.value.trim());
   if (modelSelect) localStorage.setItem('hammy_gemini_model', modelSelect.value);
+  if (styleSel) {
+    hammyVoiceStyle = styleSel.value;
+    localStorage.setItem('hammy_voice_style', hammyVoiceStyle);
+  }
+  if (pitchSlider) {
+    hammyVoicePitch = parseFloat(pitchSlider.value) || 1.95;
+    localStorage.setItem('hammy_voice_pitch', hammyVoicePitch);
+  }
+  showToast('Settings & Voice Preferences saved ✨');
 }
 
 function toggleChatSettings() {
@@ -3297,19 +3743,16 @@ function processHammyResponse(rawReply) {
   // Display in Chat
   appendHammyMessage(cleanReply);
 
-  // Animate Hammy Actor
-  animateTalkingMouth(2200);
-  playCuteHammyVoiceSqueak();
+  // Animate Hammy Actor & Mouth
+  animateTalkingMouth(2400);
+
+  // Play Hammy Cute Voice (Babble, TTS, or Hybrid)
+  playHammyVoiceAudio(cleanReply);
 
   // Extract short excerpt for above-head speech bubble
   const firstSentence = cleanReply.split(/[.!?\n]/)[0].trim() || cleanReply;
   const bubbleText = firstSentence.length > 55 ? firstSentence.substring(0, 52) + '...' : firstSentence;
   speak(bubbleText, 3500);
-
-  // Speech synthesis if voice enabled
-  if (voiceEnabled) {
-    speakHammyTTS(cleanReply);
-  }
 }
 
 function animateTalkingMouth(durationMs = 2200) {
@@ -3322,7 +3765,7 @@ function animateTalkingMouth(durationMs = 2200) {
   function step(time) {
     const elapsed = time - startTime;
     if (elapsed < durationMs) {
-      const cycle = Math.sin(elapsed / 75);
+      const cycle = Math.sin(elapsed / 70);
       mouth.setAttribute('d', cycle > 0 ? openD : originalD);
       requestAnimationFrame(step);
     } else {
@@ -3332,14 +3775,36 @@ function animateTalkingMouth(durationMs = 2200) {
   requestAnimationFrame(step);
 }
 
+function animateTalkingMouthBurst() {
+  const mouth = document.getElementById('mouthLine');
+  if (!mouth) return;
+  const originalD = 'M102 121 Q110 126 110 121 Q110 126 118 121';
+  const openD = 'M102 120 Q110 133 118 120';
+  mouth.setAttribute('d', openD);
+  setTimeout(() => mouth.setAttribute('d', originalD), 45);
+}
+
 function playCuteHammyVoiceSqueak() {
   if (!sfx || !sfx.enabled) return;
-  const pitches = [1350, 1680, 1420, 1850];
+  const pitches = [1400, 1750, 1520, 1920, 1680];
   pitches.forEach((freq, i) => {
     setTimeout(() => {
-      sfx.playSqueak(freq, 0.08);
-    }, i * 70);
+      sfx.playSqueak(freq, 0.07);
+    }, i * 65);
   });
+}
+
+// Curate best available cute voice in browser
+let bestCuteVoice = null;
+function initCuteVoices() {
+  if (!window.speechSynthesis) return;
+  const voices = window.speechSynthesis.getVoices();
+  const sweetKeywords = ['female', 'google us english', 'samantha', 'victoria', 'karen', 'tessa', 'jenny', 'ava', 'allison', 'zira', 'moira'];
+  bestCuteVoice = voices.find(v => sweetKeywords.some(k => v.name.toLowerCase().includes(k))) || voices[0];
+}
+if (typeof window !== 'undefined' && window.speechSynthesis) {
+  window.speechSynthesis.onvoiceschanged = initCuteVoices;
+  initCuteVoices();
 }
 
 function speakHammyTTS(text) {
@@ -3354,10 +3819,43 @@ function speakHammyTTS(text) {
     if (!cleanText) return;
 
     const utter = new SpeechSynthesisUtterance(cleanText);
-    utter.pitch = 1.85; // High cute chipmunk pitch
-    utter.rate = 1.25;
+    if (bestCuteVoice) utter.voice = bestCuteVoice;
+    utter.pitch = parseFloat(hammyVoicePitch) || 1.95; // Ultra cute chipmunk pitch
+    utter.rate = 1.24;
     window.speechSynthesis.speak(utter);
   } catch (e) {}
+}
+
+async function playHammyVoiceAudio(replyText) {
+  if (!voiceEnabled) return;
+
+  if (hammyVoiceStyle === 'babble') {
+    hammyBabbler.babbleText(replyText, (i, token) => {
+      animateTalkingMouthBurst();
+    });
+  } else if (hammyVoiceStyle === 'tts') {
+    speakHammyTTS(replyText);
+  } else if (hammyVoiceStyle === 'hybrid') {
+    playCuteHammyVoiceSqueak();
+    setTimeout(() => {
+      speakHammyTTS(replyText);
+    }, 380);
+  }
+}
+
+function testHammyVoicePreview() {
+  sfx.init();
+  const testPhrases = [
+    "*Squeeeak!* Hi giant hooman! I love you so much! 🌻✨",
+    "Zoomies time! My tiny paws are super fast! 🚀🐹",
+    "Sunflower seeds are the best treasure ever! Nom nom nom! 🌻",
+    "جیک جیک! من همستر کوچولو و گوگولی شمام! 🐹✨"
+  ];
+  const phrase = testPhrases[Math.floor(Math.random() * testPhrases.length)];
+  speak(phrase.substring(0, 45) + '...', 3000);
+  animateTalkingMouth(2000);
+  playHammyVoiceAudio(phrase);
+  showToast('Playing Hammy cute voice preview 🐹🔊');
 }
 
 
