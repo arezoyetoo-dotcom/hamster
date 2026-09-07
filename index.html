@@ -420,17 +420,126 @@
         <div class="lg:col-span-7 flex flex-col gap-4">
           <div class="relative bg-surface-container-lowest rounded-3xl overflow-hidden shadow-[0_12px_32px_-4px_rgba(120,111,102,0.12)] border border-outline-variant/30">
             
-            <!-- Habitat Stage Canvas Box -->
-            <div id="habitat-stage-canvas" class="relative w-full h-[460px] bg-cover bg-center flex flex-col justify-between p-5 transition-all duration-700" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAS2191j5aT3MxWu79YGbVvJidWHNODPf12ouzO4aasOgJ_EsS_PknjH0SWEcTHEL8GdRyFudAExPtsbMdFDH6AkqHc2P3OGZds-Nnc8Gv0TEYfGXs0RZIF46XzegxdNOlAu5RbTXwDwVq08XnGbxPVszl1TqmEozkZD1-UkLwDAByxJfKNp0arXKmTsMyPJXF89bPM3JBtiTURSFRDlbMc8y1QQhpnjVG4c719efuQVjbq5OM5dNjrcw');">
+            <!-- Habitat Stage: Cozy Hamster Cage Enclosure -->
+            <div id="habitat-stage-canvas" class="relative w-full h-[480px] flex flex-col justify-between p-5 transition-all duration-700 overflow-hidden" style="background: linear-gradient(180deg, #FEF9EE 0%, #FFF4DE 40%, #FDE68A 75%, #F59E0B 100%);">
               
-              <!-- Subtle Scrim -->
-              <div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/80 via-transparent to-black/15 pointer-events-none"></div>
+              <!-- Cage Wire Bars Pattern (Horizontal & Vertical) -->
+              <div class="cage-bars absolute inset-0 pointer-events-none opacity-25 z-0" style="background: repeating-linear-gradient(90deg, #92400E, #92400E 1.5px, transparent 1.5px, transparent 28px), repeating-linear-gradient(0deg, #92400E, #92400E 2px, transparent 2px, transparent 100px);"></div>
+
+              <!-- Terrarium Wooden Corner Pillars & Top Canopy -->
+              <div class="absolute top-0 left-0 right-0 h-3.5 bg-gradient-to-b from-[#B45309]/30 to-transparent border-b border-[#B45309]/25 z-10 pointer-events-none"></div>
+              <div class="absolute top-0 bottom-0 left-0 w-3.5 bg-gradient-to-r from-[#B45309]/35 via-[#F59E0B]/15 to-transparent z-10 pointer-events-none"></div>
+              <div class="absolute top-0 bottom-0 right-0 w-3.5 bg-gradient-to-l from-[#B45309]/35 via-[#F59E0B]/15 to-transparent z-10 pointer-events-none"></div>
+              <!-- Clear Terrarium Glass Sheen -->
+              <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/12 to-transparent pointer-events-none opacity-60 z-10"></div>
+
+              <!-- Hanging Wooden Climber / Chew Bridge at Top -->
+              <div class="absolute top-2 left-1/2 -translate-x-1/2 z-10 pointer-events-none opacity-85">
+                <svg class="w-36 h-12" viewBox="0 0 120 40">
+                  <line x1="15" y1="0" x2="15" y2="30" stroke="#78350F" stroke-width="1.5" stroke-dasharray="2,2"/>
+                  <line x1="105" y1="0" x2="105" y2="30" stroke="#78350F" stroke-width="1.5" stroke-dasharray="2,2"/>
+                  <rect x="10" y="10" width="100" height="4" rx="2" fill="#D97706"/>
+                  <rect x="10" y="20" width="100" height="4" rx="2" fill="#F59E0B"/>
+                  <rect x="10" y="30" width="100" height="4" rx="2" fill="#10B981"/>
+                  <circle cx="60" cy="38" r="3" fill="#FBBF24" stroke="#B45309" stroke-width="1"/>
+                </svg>
+              </div>
+
+              <!-- Hanging Water Bottle with Metal Sipper Tube (Left Wall) -->
+              <div class="absolute top-14 left-4 z-20 flex flex-col items-center cursor-pointer group" onclick="drinkWater()" title="Click to offer Hammy cool water!">
+                <!-- Wire Clamp -->
+                <div class="w-9 h-2.5 bg-slate-400 rounded-sm shadow-xs border border-slate-500 mb-0.5"></div>
+                <!-- Bottle Body -->
+                <div class="relative w-8 h-20 bg-sky-100/90 backdrop-blur-xs rounded-t-xl rounded-b-md border-2 border-sky-300 shadow-md overflow-hidden flex flex-col justify-end p-0.5 group-hover:scale-105 transition-transform">
+                  <div class="w-full bg-gradient-to-t from-sky-500 to-sky-400/80 rounded-b-xs transition-all duration-500 relative" id="cage-water-level" style="height: 75%;">
+                    <div class="w-2 h-2 rounded-full bg-white/70 mx-auto mt-1 animate-pulse"></div>
+                  </div>
+                  <div class="absolute top-2 left-1 text-[8px] font-bold text-sky-800 opacity-70 leading-none">60ml</div>
+                  <div class="absolute top-6 left-1 text-[7px] font-semibold text-sky-700 opacity-50 leading-none">30ml</div>
+                </div>
+                <!-- Sipper Spout -->
+                <div class="w-2 h-7 bg-gradient-to-r from-slate-300 via-slate-100 to-slate-400 border-x border-slate-500 rotate-15 origin-top -mt-1 relative shadow-xs">
+                  <div class="w-2.5 h-2.5 rounded-full bg-sky-400 border border-sky-200 absolute -bottom-1.5 -left-0.5 shadow-sm transition-all duration-300" id="water-droplet"></div>
+                </div>
+                <span class="text-[9px] font-bold text-sky-900 mt-1 bg-surface-container-lowest/90 px-1.5 py-0.5 rounded-full shadow-xs opacity-0 group-hover:opacity-100 transition-opacity">Water</span>
+              </div>
+
+              <!-- Wooden Hideout Cottage (Back Left of Cage) -->
+              <div class="absolute bottom-24 left-16 z-10 cursor-pointer group" onclick="putToSleep()" title="Click to tuck Hammy into his cozy hideout!">
+                <svg class="w-20 h-20 group-hover:scale-105 transition-transform filter drop-shadow-sm" viewBox="0 0 90 90">
+                  <polygon points="45,14 10,46 80,46" fill="#B45309" stroke="#78350F" stroke-width="2.5"/>
+                  <polygon points="45,20 18,43 72,43" fill="#D97706"/>
+                  <rect x="58" y="16" width="8" height="15" rx="1" fill="#78350F"/>
+                  <circle cx="62" cy="11" r="3.5" fill="#ffffff" opacity="0.6"/>
+                  <rect x="18" y="45" width="54" height="38" rx="4" fill="#FDE68A" stroke="#B45309" stroke-width="2"/>
+                  <path d="M34 83 V60 A11 11 0 0 1 56 60 V83 Z" fill="#78350F"/>
+                  <path d="M45 52 A 3 3 0 0 0 42 49 A 3 3 0 0 0 39 52 Q 39 55 45 58 Q 51 55 51 52 A 3 3 0 0 0 48 49 A 3 3 0 0 0 45 52 Z" fill="#FF85A2"/>
+                </svg>
+                <span class="text-[9px] font-bold text-amber-950 ml-3 bg-surface-container-lowest/90 px-1.5 py-0.5 rounded-full shadow-xs opacity-0 group-hover:opacity-100 transition-opacity">Hideout</span>
+              </div>
+
+              <!-- Exercise Running Wheel (Right Corner of Cage) -->
+              <div class="absolute bottom-20 right-4 z-10 flex flex-col items-center cursor-pointer group" onclick="toggleWheelRun()" title="Click to spin the running wheel!">
+                <div class="relative w-28 h-28 sm:w-32 sm:h-32 transition-transform duration-300 group-hover:scale-105 filter drop-shadow-sm">
+                  <svg class="w-full h-full" id="cageWheelSvg" viewBox="0 0 110 110">
+                    <path d="M28 102 L55 68 L82 102" stroke="#78350F" stroke-width="5" stroke-linecap="round" fill="none"/>
+                    <rect x="22" y="98" width="66" height="6" rx="3" fill="#B45309"/>
+                    <circle cx="55" cy="55" r="48" fill="rgba(255,255,255,0.25)" stroke="#10B981" stroke-width="5"/>
+                    <circle cx="55" cy="55" r="44" fill="rgba(16, 185, 129, 0.07)" stroke="#6EE7B7" stroke-width="2"/>
+                    <g id="cageWheelSpokes" class="origin-center" style="transform-origin: 55px 55px;">
+                      <line x1="55" y1="9" x2="55" y2="101" stroke="#10B981" stroke-width="2.5"/>
+                      <line x1="9" y1="55" x2="101" y2="55" stroke="#10B981" stroke-width="2.5"/>
+                      <line x1="22" y1="22" x2="88" y2="88" stroke="#34D399" stroke-width="2"/>
+                      <line x1="88" y1="22" x2="22" y2="88" stroke="#34D399" stroke-width="2"/>
+                      <circle cx="55" cy="55" r="8" fill="#047857" stroke="#ffffff" stroke-width="2"/>
+                      <circle cx="55" cy="55" r="3" fill="#FBBF24"/>
+                    </g>
+                  </svg>
+                </div>
+                <span class="text-[9px] font-bold text-emerald-950 -mt-2 bg-surface-container-lowest/90 px-1.5 py-0.5 rounded-full shadow-xs opacity-0 group-hover:opacity-100 transition-opacity">Wheel</span>
+              </div>
+
+              <!-- Ceramic Seed & Grain Bowl (Bottom Right Bedding) -->
+              <div class="absolute bottom-6 right-36 z-20 cursor-pointer group" onclick="feedHammy('seed')" title="Click to fill Hammy's seed dish!">
+                <div class="relative w-16 h-9 bg-gradient-to-b from-amber-50 to-amber-200 rounded-full border-2 border-amber-400 shadow-md flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div class="flex items-center gap-0.5 select-none">
+                    <span class="text-xs">🌻</span>
+                    <span class="text-[10px]">🌾</span>
+                    <span class="text-xs">🌻</span>
+                  </div>
+                </div>
+                <span class="text-[9px] font-bold text-amber-950 ml-2 bg-surface-container-lowest/90 px-1.5 py-0.5 rounded-full shadow-xs opacity-0 group-hover:opacity-100 transition-opacity">Seed Bowl</span>
+              </div>
+
+              <!-- Fluffy Aspen Wood Bedding Floor Layer -->
+              <div class="absolute bottom-0 left-0 right-0 h-28 pointer-events-none z-1 overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#B45309]/45 via-[#D97706]/25 to-transparent"></div>
+                <svg class="w-full h-full object-cover" viewBox="0 0 600 100" preserveAspectRatio="none">
+                  <path d="M0 55 Q35 42 70 52 T140 46 T210 54 T280 44 T350 53 T420 45 T490 54 T560 46 T600 52 L600 100 L0 100 Z" fill="#FDE68A" opacity="0.95"/>
+                  <path d="M0 68 Q40 56 80 66 T160 58 T240 67 T320 57 T400 66 T480 58 T560 65 T600 60 L600 100 L0 100 Z" fill="#FBBF24" opacity="0.9"/>
+                  
+                  <ellipse cx="50" cy="78" rx="16" ry="5" fill="#D97706" transform="rotate(-15 50 78)" opacity="0.85"/>
+                  <ellipse cx="130" cy="85" rx="20" ry="6" fill="#F59E0B" transform="rotate(20 130 85)" opacity="0.9"/>
+                  <ellipse cx="220" cy="75" rx="17" ry="5" fill="#B45309" transform="rotate(-10 220 75)" opacity="0.75"/>
+                  <ellipse cx="310" cy="82" rx="22" ry="6" fill="#D97706" transform="rotate(12 310 82)" opacity="0.85"/>
+                  <ellipse cx="400" cy="76" rx="18" ry="5" fill="#F59E0B" transform="rotate(-18 400 76)" opacity="0.9"/>
+                  <ellipse cx="490" cy="84" rx="20" ry="5.5" fill="#B45309" transform="rotate(15 490 84)" opacity="0.8"/>
+                  <ellipse cx="570" cy="79" rx="15" ry="4.5" fill="#D97706" transform="rotate(-8 570 79)" opacity="0.85"/>
+
+                  <circle cx="95" cy="80" r="3.5" fill="#F43F5E" opacity="0.8"/>
+                  <circle cx="260" cy="86" r="4" fill="#F43F5E" opacity="0.85"/>
+                  <circle cx="450" cy="79" r="3.5" fill="#F43F5E" opacity="0.8"/>
+                  <ellipse cx="180" cy="82" rx="3.5" ry="6" fill="#78350F" transform="rotate(28 180 82)"/>
+                  <ellipse cx="360" cy="86" rx="3.5" ry="6" fill="#78350F" transform="rotate(-32 360 86)"/>
+                  <ellipse cx="520" cy="81" rx="3.5" ry="6" fill="#78350F" transform="rotate(18 520 81)"/>
+                </svg>
+              </div>
 
               <!-- Top Stage Status Bar -->
               <div class="relative z-10 flex items-center justify-between w-full">
                 <div class="flex items-center gap-2 bg-surface-container-lowest/85 backdrop-blur-md px-3.5 py-1.5 rounded-full shadow-sm text-xs font-bold text-on-surface border border-outline-variant/20">
                   <span class="material-symbols-outlined text-secondary text-sm">potted_plant</span>
-                  <span id="stage-theme-name">Birch & Moss Sanctuary</span>
+                  <span id="stage-theme-name">Cozy Hamster Cage & Terrarium</span>
                 </div>
                 <div class="flex items-center gap-2">
                   <button class="w-9 h-9 rounded-full bg-surface-container-lowest/90 backdrop-blur-md hover:bg-primary-container text-on-surface flex items-center justify-center shadow-sm hover:scale-105 active:scale-95 transition-all border border-outline-variant/20" onclick="takeSnapshot()" title="Capture Polaroid Snapshot">
@@ -760,9 +869,20 @@
               </div>
             </div>
 
-            <!-- Mini Live Fitting Canvas -->
-            <div class="relative w-full h-64 bg-cover bg-center rounded-2xl overflow-hidden flex items-center justify-center p-4 border border-outline-variant/20 shadow-inner" id="fitting-preview-box" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAS2191j5aT3MxWu79YGbVvJidWHNODPf12ouzO4aasOgJ_EsS_PknjH0SWEcTHEL8GdRyFudAExPtsbMdFDH6AkqHc2P3OGZds-Nnc8Gv0TEYfGXs0RZIF46XzegxdNOlAu5RbTXwDwVq08XnGbxPVszl1TqmEozkZD1-UkLwDAByxJfKNp0arXKmTsMyPJXF89bPM3JBtiTURSFRDlbMc8y1QQhpnjVG4c719efuQVjbq5OM5dNjrcw');">
-              <div class="absolute inset-0 bg-black/10 pointer-events-none"></div>
+            <!-- Mini Live Fitting Canvas: Cage Mirror Studio -->
+            <div class="relative w-full h-64 rounded-2xl overflow-hidden flex items-center justify-center p-4 border border-outline-variant/20 shadow-inner" id="fitting-preview-box" style="background: linear-gradient(180deg, #FEF9EE 0%, #FFF4DE 40%, #FDE68A 75%, #F59E0B 100%);">
+              <!-- Cage Wire Bars Pattern in Fitting Room -->
+              <div class="cage-bars absolute inset-0 pointer-events-none opacity-20 z-0" style="background: repeating-linear-gradient(90deg, #92400E, #92400E 1.5px, transparent 1.5px, transparent 24px), repeating-linear-gradient(0deg, #92400E, #92400E 2px, transparent 2px, transparent 90px);"></div>
+              <!-- Mini Aspen Shavings Floor -->
+              <div class="absolute bottom-0 left-0 right-0 h-16 pointer-events-none z-1 overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#B45309]/30 to-transparent"></div>
+                <svg class="w-full h-full object-cover" viewBox="0 0 400 60" preserveAspectRatio="none">
+                  <path d="M0 30 Q30 20 60 26 T120 22 T180 28 T240 22 T300 27 T360 22 T400 26 L400 60 L0 60 Z" fill="#FDE68A" opacity="0.9"/>
+                  <ellipse cx="60" cy="45" rx="14" ry="4" fill="#D97706" opacity="0.8"/>
+                  <ellipse cx="180" cy="48" rx="16" ry="4.5" fill="#F59E0B" opacity="0.9"/>
+                  <ellipse cx="300" cy="44" rx="15" ry="4" fill="#B45309" opacity="0.8"/>
+                </svg>
+              </div>
 
               <div class="relative w-48 h-48 flex items-center justify-center">
                 <!-- Dedicated SVG Hamster for Fitting Mirror -->
@@ -1165,16 +1285,16 @@
         {
           id: 1,
           date: 'Sep 3, 2026',
-          caption: 'First day in the Birch & Moss terrarium! Fluffed up the wood shavings.',
+          caption: 'First day in my cozy cage habitat! Burrowed deep in the fresh aspen wood shavings.',
           stickers: '🌻✨',
-          imgUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAS2191j5aT3MxWu79YGbVvJidWHNODPf12ouzO4aasOgJ_EsS_PknjH0SWEcTHEL8GdRyFudAExPtsbMdFDH6AkqHc2P3OGZds-Nnc8Gv0TEYfGXs0RZIF46XzegxdNOlAu5RbTXwDwVq08XnGbxPVszl1TqmEozkZD1-UkLwDAByxJfKNp0arXKmTsMyPJXF89bPM3JBtiTURSFRDlbMc8y1QQhpnjVG4c719efuQVjbq5OM5dNjrcw'
+          imgUrl: ''
         },
         {
           id: 2,
           date: 'Sep 5, 2026',
-          caption: 'Found where the roasted walnuts were hidden. Mission accomplished.',
-          stickers: '👑🌰',
-          imgUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuByBoA0YaB3IbFXhRllpYa3Ly6-YPUosHkrt8Gcqv-6VZjcjtzxbFQIic_kDcNyk9P7TWY3ygWWU-f5HX6RZpwXuSxG3NpPp9XyXuenWvR_gR5rc6O5Om781B5pyh9hTvFZhBtYmYN80nRTNRiX2ssp_1q95b-4_6Rl687tRcwRqc3a_6T565v47EU8cQKtJ2hz5tu3dWSKn7ELV8xv3g1BvuJ6ATixIol9P5adRwKT0mU50lIzV5TpXg'
+          caption: 'Conquered the exercise running wheel and devoured three roasted sunflower seeds.',
+          stickers: '👑🏃',
+          imgUrl: ''
         }
       ]
     };
@@ -1456,6 +1576,7 @@
     };
 
     function updateHammyCostume(hatKey) {
+      currentCostumeKey = hatKey;
       const markup = HATS_SVG[hatKey] || '';
       const slot1 = document.getElementById('costumeSlot');
       const slot2 = document.getElementById('fittingCostumeSlot');
@@ -1638,6 +1759,45 @@
 
       petHammy();
       twitchEars();
+    }
+
+
+    /* ======================================================================
+       3C. CAGE ENVIRONMENT INTERACTIONS (Water Bottle, Wheel Spin)
+       ====================================================================== */
+    function drinkWater() {
+      audio.playPurr();
+      const droplet = document.getElementById('water-droplet');
+      if (droplet) {
+        droplet.style.transform = 'translateY(18px) scale(1.4)';
+        droplet.style.opacity = '0';
+        setTimeout(() => {
+          droplet.style.transform = 'translateY(0) scale(1)';
+          droplet.style.opacity = '1';
+        }, 500);
+      }
+      
+      const waterLevel = document.getElementById('cage-water-level');
+      if (waterLevel) {
+        waterLevel.style.height = '68%';
+        setTimeout(() => waterLevel.style.height = '75%', 1200);
+      }
+
+      appState.vitals.hunger = Math.min(100, appState.vitals.hunger + 6);
+      appState.vitals.happy = Math.min(100, appState.vitals.happy + 8);
+      updateVitalsDisplay();
+
+      setSpeechBubble("“*slurp slurp slurp* Ahh! Fresh, cool water from my sipper tube! Delicious!” 💧✨");
+    }
+
+    function toggleWheelRun() {
+      audio.playBabble();
+      const spokes = document.getElementById('cageWheelSpokes');
+      if (spokes) {
+        spokes.classList.add('wheel-spinning');
+        setTimeout(() => spokes.classList.remove('wheel-spinning'), 2500);
+      }
+      triggerZoomies();
     }
 
     /* ======================================================================
@@ -2180,6 +2340,74 @@
     /* ======================================================================
        8. POLAROID SNAPSHOT & SCRAPBOOK
        ====================================================================== */
+
+    function generateCageSnapshotDataUrl(hatKey) {
+      const hatMarkup = HATS_SVG[hatKey] || HATS_SVG.acorn || '';
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" width="320" height="220">
+        <defs>
+          <radialGradient id="sBodyFur" cx="45%" cy="38%" r="60%">
+            <stop offset="0%" stop-color="#fbd38d"/>
+            <stop offset="55%" stop-color="#f59e0b"/>
+            <stop offset="100%" stop-color="#d97706"/>
+          </radialGradient>
+          <radialGradient id="sWhiteBelly" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="100%" stop-color="#fff8f0"/>
+          </radialGradient>
+          <radialGradient id="sPinkEar" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ffccd5"/>
+            <stop offset="100%" stop-color="#ff7675"/>
+          </radialGradient>
+        </defs>
+        <rect width="320" height="220" fill="#fef3c7"/>
+        <!-- Cage wire bars -->
+        <g stroke="#b45309" stroke-width="1" opacity="0.18">
+          <line x1="20" y1="0" x2="20" y2="220"/><line x1="50" y1="0" x2="50" y2="220"/>
+          <line x1="80" y1="0" x2="80" y2="220"/><line x1="110" y1="0" x2="110" y2="220"/>
+          <line x1="140" y1="0" x2="140" y2="220"/><line x1="170" y1="0" x2="170" y2="220"/>
+          <line x1="200" y1="0" x2="200" y2="220"/><line x1="230" y1="0" x2="230" y2="220"/>
+          <line x1="260" y1="0" x2="260" y2="220"/><line x1="290" y1="0" x2="290" y2="220"/>
+          <line x1="0" y1="70" x2="320" y2="70"/><line x1="0" y1="140" x2="320" y2="140"/>
+        </g>
+        <!-- Water bottle on left wall -->
+        <rect x="12" y="30" width="14" height="38" rx="3" fill="#bae6fd" stroke="#0284c7" stroke-width="1.5"/>
+        <rect x="16" y="68" width="4" height="12" fill="#94a3b8"/>
+        <!-- Aspen shavings bedding floor -->
+        <path d="M0 160 Q40 148 80 155 T160 150 T240 156 T320 152 L320 220 L0 220 Z" fill="#fde68a"/>
+        <ellipse cx="60" cy="185" rx="15" ry="4" fill="#d97706" opacity="0.7"/>
+        <ellipse cx="260" cy="188" rx="18" ry="4" fill="#d97706" opacity="0.7"/>
+        <!-- Hammy in center -->
+        <g transform="translate(50, 0) scale(0.95)">
+          <ellipse cx="110" cy="144" rx="55" ry="46" fill="url(#sBodyFur)"/>
+          <ellipse cx="110" cy="150" rx="34" ry="30" fill="url(#sWhiteBelly)"/>
+          <ellipse cx="70" cy="134" rx="20" ry="16" fill="#f59e0b"/>
+          <ellipse cx="150" cy="134" rx="20" ry="16" fill="#f59e0b"/>
+          <circle cx="72" cy="132" r="8" fill="#ff4757" opacity="0.4"/>
+          <circle cx="148" cy="132" r="8" fill="#ff4757" opacity="0.4"/>
+          <ellipse cx="110" cy="104" rx="46" ry="40" fill="url(#sBodyFur)"/>
+          <ellipse cx="76" cy="66" rx="15" ry="18" fill="#d97706"/>
+          <ellipse cx="76" cy="68" rx="10" ry="12" fill="url(#sPinkEar)"/>
+          <ellipse cx="144" cy="66" rx="15" ry="18" fill="#d97706"/>
+          <ellipse cx="144" cy="68" rx="10" ry="12" fill="url(#sPinkEar)"/>
+          <circle cx="88" cy="102" r="10" fill="#1c1917"/>
+          <circle cx="91" cy="99" r="3.5" fill="#ffffff"/>
+          <circle cx="132" cy="102" r="10" fill="#1c1917"/>
+          <circle cx="135" cy="99" r="3.5" fill="#ffffff"/>
+          <line x1="72" y1="114" x2="42" y2="110" stroke="#ffffff" stroke-width="2"/>
+          <line x1="72" y1="119" x2="38" y2="120" stroke="#ffffff" stroke-width="2"/>
+          <line x1="148" y1="114" x2="178" y2="110" stroke="#ffffff" stroke-width="2"/>
+          <line x1="148" y1="119" x2="182" y2="120" stroke="#ffffff" stroke-width="2"/>
+          <polygon points="105,114 115,114 110,120" fill="#ff6b81"/>
+          <path d="M102,121 Q110,126 110,121 Q110,126 118,121" fill="none" stroke="#5c3d2e" stroke-width="2.5" stroke-linecap="round"/>
+          <ellipse cx="88" cy="150" rx="9" ry="11" fill="#f8a5c2"/>
+          <ellipse cx="132" cy="150" rx="9" ry="11" fill="#f8a5c2"/>
+          <ellipse cx="110" cy="148" rx="6" ry="9" fill="#78350f" stroke="#f59e0b" stroke-width="1.5"/>
+          ${hatMarkup}
+        </g>
+      </svg>`;
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    }
+
     function takeSnapshot() {
       audio.playShutter();
 
@@ -2187,13 +2415,14 @@
       const item = {
         id: id,
         date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-        caption: `Look at me in my ${appState.equipped.hat}! Cozy perfection.`,
+        caption: `Look at me in my cozy cage habitat with ${appState.equipped.hat}! ✨`,
         stickers: '📸✨',
-        imgUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAS2191j5aT3MxWu79YGbVvJidWHNODPf12ouzO4aasOgJ_EsS_PknjH0SWEcTHEL8GdRyFudAExPtsbMdFDH6AkqHc2P3OGZds-Nnc8Gv0TEYfGXs0RZIF46XzegxdNOlAu5RbTXwDwVq08XnGbxPVszl1TqmEozkZD1-UkLwDAByxJfKNp0arXKmTsMyPJXF89bPM3JBtiTURSFRDlbMc8y1QQhpnjVG4c719efuQVjbq5OM5dNjrcw'
+        imgUrl: generateCageSnapshotDataUrl(currentCostumeKey || 'acorn')
       };
 
       appState.scrapbook.unshift(item);
-      setSpeechBubble("“📸 FLASH! Snapshot saved directly to Hammy’s Scrapbook album!” ✨");
+      renderScrapbook();
+      setSpeechBubble("“📸 FLASH! Snapshot in my cage saved to Hammy’s Scrapbook album!” ✨");
     }
 
     function renderScrapbook() {
@@ -2235,6 +2464,9 @@
       updateSeedsUI();
       renderBoutiqueCatalog();
       updateHammyCostume('acorn');
+      if (appState.scrapbook[0] && !appState.scrapbook[0].imgUrl) appState.scrapbook[0].imgUrl = generateCageSnapshotDataUrl('acorn');
+      if (appState.scrapbook[1] && !appState.scrapbook[1].imgUrl) appState.scrapbook[1].imgUrl = generateCageSnapshotDataUrl('crown');
+      renderScrapbook();
     });
   </script>
 
