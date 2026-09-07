@@ -173,10 +173,49 @@
       border-radius: 6px;
       box-shadow: 0 10px 25px -5px rgba(120, 111, 102, 0.18), 0 2px 6px rgba(120, 111, 102, 0.08);
       transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
     .polaroid-card:hover {
       transform: translateY(-4px) rotate(0.5deg);
       box-shadow: 0 16px 32px -6px rgba(120, 111, 102, 0.25);
+    }
+
+    /* Hamster SVG Animations */
+    .hamster-body-group {
+      transform-origin: 110px 140px;
+      animation: idleBreathe 3.5s infinite ease-in-out;
+    }
+    @keyframes idleBreathe {
+      0%, 100% { transform: scale(1) translateY(0); }
+      50% { transform: scale(1.025, 0.985) translateY(2px); }
+    }
+
+    .ear-left, .ear-right {
+      transform-origin: center;
+      transition: transform 0.18s ease;
+    }
+
+    .eye-lid {
+      transform-origin: 50% 50%;
+      transition: transform 0.1s ease;
+    }
+
+    .cheek-pouch {
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .zzz-bubble {
+      position: absolute;
+      pointer-events: none;
+      font-size: 20px;
+      font-weight: 800;
+      color: #b45309;
+      animation: zzzFloat 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+      z-index: 50;
+      user-select: none;
+    }
+    @keyframes zzzFloat {
+      0% { transform: translate(0, 0) scale(0.6); opacity: 0.9; }
+      50% { transform: translate(14px, -35px) scale(1.1); opacity: 0.8; }
+      100% { transform: translate(26px, -70px) scale(1.4); opacity: 0; }
     }
 
     /* Hide scrollbars */
@@ -253,14 +292,44 @@
           <span class="material-symbols-outlined text-lg">wb_sunny</span>
         </button>
 
-        <!-- Caregiver Profile -->
-        <div class="hidden sm:flex items-center gap-2 pl-2 border-l border-outline-variant/30">
-          <div class="text-right">
-            <div class="font-bold text-xs text-on-surface leading-tight">Maya</div>
-            <div class="text-[10px] text-on-surface-variant leading-none">Caregiver</div>
+        <!-- Caregiver Profile Badge (Customizable / No Forced Maya, Cute Hamster Avatar) -->
+        <div class="hidden sm:flex items-center gap-2.5 pl-2 border-l border-outline-variant/30 group">
+          <div class="text-right cursor-pointer" onclick="editCaregiverName()" title="Click to change your nickname">
+            <div class="font-bold text-xs text-on-surface leading-tight flex items-center justify-end gap-1" id="header-caregiver-name">
+              <span>Caregiver</span>
+              <span class="material-symbols-outlined text-[12px] opacity-40 group-hover:opacity-100 transition-opacity">edit</span>
+            </div>
+            <div class="text-[10px] text-on-surface-variant leading-none">Hammy's Best Friend</div>
           </div>
-          <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-sm font-bold border border-primary/30">
-            🌸
+          <div class="w-9 h-9 rounded-full bg-primary-container/20 flex items-center justify-center border-2 border-primary-container shadow-xs cursor-pointer overflow-hidden p-1 hover:scale-110 active:scale-95 transition-all" onclick="editCaregiverName()" title="Caregiver Badge (Click to customize name)">
+            <!-- Cute Mini Hamster Avatar Badge -->
+            <svg viewBox="0 0 36 36" class="w-full h-full">
+              <!-- Ears -->
+              <ellipse cx="10" cy="11" rx="4.5" ry="5.5" fill="#e58e26"/>
+              <ellipse cx="10" cy="11" rx="2.5" ry="3.5" fill="#ffb8b8"/>
+              <ellipse cx="26" cy="11" rx="4.5" ry="5.5" fill="#e58e26"/>
+              <ellipse cx="26" cy="11" rx="2.5" ry="3.5" fill="#ffb8b8"/>
+              <!-- Head -->
+              <ellipse cx="18" cy="21" rx="13" ry="11" fill="#f59e0b"/>
+              <!-- Belly / Chin patch -->
+              <ellipse cx="18" cy="24" rx="8" ry="6" fill="#ffffff" opacity="0.95"/>
+              <!-- Rosy Cheeks -->
+              <circle cx="10" cy="22" r="2.8" fill="#ff6b81" opacity="0.5"/>
+              <circle cx="26" cy="22" r="2.8" fill="#ff6b81" opacity="0.5"/>
+              <!-- Big kawaii sparkling eyes -->
+              <circle cx="13.5" cy="18.5" r="2.2" fill="#18181b"/>
+              <circle cx="14.2" cy="17.8" r="0.8" fill="#ffffff"/>
+              <circle cx="22.5" cy="18.5" r="2.2" fill="#18181b"/>
+              <circle cx="23.2" cy="17.8" r="0.8" fill="#ffffff"/>
+              <!-- Tiny pink nose -->
+              <polygon points="17,21.5 19,21.5 18,22.8" fill="#ff6b81"/>
+              <!-- Cute W mouth -->
+              <path d="M16.5,23.5 Q18,24.6 18,23.5 Q18,24.6 19.5,23.5" fill="none" stroke="#5c3d2e" stroke-width="0.8" stroke-linecap="round"/>
+              <!-- Tiny paws holding a sunflower seed -->
+              <ellipse cx="18" cy="27.5" rx="2.5" ry="3.5" fill="#d97706" transform="rotate(-15 18 27.5)"/>
+              <ellipse cx="15.5" cy="28.5" rx="1.5" ry="2" fill="#ffb8b8"/>
+              <ellipse cx="20.5" cy="28.5" rx="1.5" ry="2" fill="#ffb8b8"/>
+            </svg>
           </div>
         </div>
 
@@ -379,21 +448,142 @@
                 <!-- Dynamic Speech Bubble -->
                 <div id="hammy-speech-bubble" class="mb-3 bg-surface-container-lowest/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-[0_8px_20px_-4px_rgba(120,111,102,0.16)] max-w-[300px] text-center transform -rotate-1 transition-all duration-300 border border-outline-variant/30">
                   <p class="text-xs text-on-surface font-semibold leading-relaxed" id="hammy-speech-text">
-                    “Maya! I hid two sunflower seeds in my right cheek pouch and I am very proud of myself! 🌻✨”
+                    “Squeeeak! I hid two sunflower seeds in my right cheek pouch and I am very proud of myself! 🌻✨”
                   </p>
                   <div class="w-3 h-3 bg-surface-container-lowest rotate-45 mx-auto -mb-1.5 mt-1 border-r border-b border-outline-variant/30"></div>
                 </div>
 
-                <!-- Hamster Avatar + Interactive SVG Puppet Layer -->
-                <div class="relative w-60 h-60 group">
-                  <div class="absolute inset-0 bg-primary-container/20 blur-2xl rounded-full scale-90 group-hover:scale-110 transition-all duration-500 pointer-events-none"></div>
+                <!-- Hamster Avatar: Living Cute Animated SVG Puppet -->
+                <div class="relative w-64 h-64 sm:w-72 sm:h-72 group flex items-center justify-center select-none" id="hammy-actor-wrap" onclick="handleHammyClick(event)">
+                  <div class="absolute inset-0 bg-primary-container/25 blur-3xl rounded-full scale-90 group-hover:scale-110 transition-all duration-500 pointer-events-none"></div>
                   
-                  <img id="hammy-avatar-img" class="relative w-full h-full object-contain filter drop-shadow-[0_12px_20px_rgba(0,0,0,0.18)] transition-transform duration-300 transform group-hover:scale-105 select-none pointer-events-none" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByBoA0YaB3IbFXhRllpYa3Ly6-YPUosHkrt8Gcqv-6VZjcjtzxbFQIic_kDcNyk9P7TWY3ygWWU-f5HX6RZpwXuSxG3NpPp9XyXuenWvR_gR5rc6O5Om781B5pyh9hTvFZhBtYmYN80nRTNRiX2ssp_1q95b-4_6Rl687tRcwRqc3a_6T565v47EU8cQKtJ2hz5tu3dWSKn7ELV8xv3g1BvuJ6ATixIol9P5adRwKT0mU50lIzV5TpXg" alt="Hammy the Hamster"/>
+                  <!-- Ultra Cute Living Vector SVG Hamster -->
+                  <svg class="relative w-full h-full filter drop-shadow-[0_12px_24px_rgba(120,111,102,0.22)] transition-transform duration-300 transform group-hover:scale-105 select-none" id="hammyMasterSvg" viewBox="0 0 220 220">
+                    <defs>
+                      <radialGradient id="bodyFurGrad" cx="45%" cy="38%" r="60%">
+                        <stop offset="0%" stop-color="#fbd38d"/>
+                        <stop offset="55%" stop-color="#f59e0b"/>
+                        <stop offset="100%" stop-color="#d97706"/>
+                      </radialGradient>
+                      <radialGradient id="whiteBellyGrad" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#ffffff"/>
+                        <stop offset="100%" stop-color="#fff8f0"/>
+                      </radialGradient>
+                      <radialGradient id="pinkEarGrad" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#ffccd5"/>
+                        <stop offset="100%" stop-color="#ff7675"/>
+                      </radialGradient>
+                    </defs>
+
+                    <!-- Hamster Body Group with Gentle Breathing Animation -->
+                    <g class="hamster-body-group" id="hamsterBodyGroup">
+                      
+                      <!-- Back feet -->
+                      <ellipse class="hamster-foot foot-left" id="footLeft" cx="76" cy="190" rx="16" ry="10" fill="#f8a5c2"/>
+                      <ellipse class="hamster-foot foot-right" id="footRight" cx="144" cy="190" rx="16" ry="10" fill="#f8a5c2"/>
+
+                      <!-- Fluffy Plump Body -->
+                      <ellipse cx="110" cy="144" rx="66" ry="56" fill="url(#bodyFurGrad)"/>
+
+                      <!-- Soft Cream Belly Patch -->
+                      <ellipse cx="110" cy="152" rx="40" ry="36" fill="url(#whiteBellyGrad)" opacity="0.95"/>
+
+                      <!-- Fluffy Cheek Pouches with Physics Scaling -->
+                      <g id="cheeksGroup">
+                        <ellipse class="cheek-pouch" id="leftCheek" cx="62" cy="134" rx="24" ry="20" fill="#f59e0b"/>
+                        <ellipse class="cheek-pouch" id="rightCheek" cx="158" cy="134" rx="24" ry="20" fill="#f59e0b"/>
+                        <!-- Rosy Blush Circles -->
+                        <circle id="leftBlush" cx="64" cy="132" r="10" fill="#ff4757" opacity="0.45"/>
+                        <circle id="rightBlush" cx="156" cy="132" r="10" fill="#ff4757" opacity="0.45"/>
+                      </g>
+
+                      <!-- Cute Hamster Head -->
+                      <ellipse cx="110" cy="100" rx="54" ry="48" fill="url(#bodyFurGrad)"/>
+
+                      <!-- Ears with Twitch Animation -->
+                      <g id="earsGroup">
+                        <g class="ear-left transition-transform duration-150" id="earLeft">
+                          <ellipse cx="72" cy="56" rx="18" ry="22" fill="#d97706"/>
+                          <ellipse cx="72" cy="58" rx="12" ry="15" fill="url(#pinkEarGrad)"/>
+                        </g>
+                        <g class="ear-right transition-transform duration-150" id="earRight">
+                          <ellipse cx="148" cy="56" rx="18" ry="22" fill="#d97706"/>
+                          <ellipse cx="148" cy="58" rx="12" ry="15" fill="url(#pinkEarGrad)"/>
+                        </g>
+                      </g>
+
+                      <!-- Eyes Cluster: Open Awake vs Happy Sleeping -->
+                      <g id="eyesCluster">
+                        <!-- Open / Awake Eyes with Mouse Cursor Gaze Tracking -->
+                        <g id="openEyesGroup" class="transition-opacity duration-300">
+                          <circle cx="85" cy="98" r="12" fill="#1c1917"/>
+                          <circle class="eye-pupil" id="leftPupil" cx="85" cy="98" r="6.5" fill="#000000"/>
+                          <!-- Glistening white eye shine -->
+                          <circle cx="88" cy="94.5" r="4" fill="#ffffff"/>
+                          <circle cx="83" cy="100.5" r="1.8" fill="#ffffff"/>
+                          <ellipse class="eye-lid transition-transform duration-100" id="leftEyeLid" cx="85" cy="98" rx="13" ry="13" fill="#f59e0b" opacity="0"/>
+
+                          <circle cx="135" cy="98" r="12" fill="#1c1917"/>
+                          <circle class="eye-pupil" id="rightPupil" cx="135" cy="98" r="6.5" fill="#000000"/>
+                          <!-- Glistening white eye shine -->
+                          <circle cx="138" cy="94.5" r="4" fill="#ffffff"/>
+                          <circle cx="133" cy="100.5" r="1.8" fill="#ffffff"/>
+                          <ellipse class="eye-lid transition-transform duration-100" id="rightEyeLid" cx="135" cy="98" rx="13" ry="13" fill="#f59e0b" opacity="0"/>
+                        </g>
+
+                        <!-- Sweet Sleeping Curved Lashes (Visible when asleep) -->
+                        <g id="sleepingEyesGroup" opacity="0" class="transition-opacity duration-300">
+                          <path d="M72 97 Q85 107 98 97" fill="none" stroke="#5c3d2e" stroke-width="3" stroke-linecap="round"/>
+                          <path d="M72 99 L68 103" stroke="#5c3d2e" stroke-width="2.2" stroke-linecap="round"/>
+                          <path d="M98 99 L102 103" stroke="#5c3d2e" stroke-width="2.2" stroke-linecap="round"/>
+                          
+                          <path d="M122 97 Q135 107 148 97" fill="none" stroke="#5c3d2e" stroke-width="3" stroke-linecap="round"/>
+                          <path d="M122 99 L118 103" stroke="#5c3d2e" stroke-width="2.2" stroke-linecap="round"/>
+                          <path d="M148 99 L152 103" stroke="#5c3d2e" stroke-width="2.2" stroke-linecap="round"/>
+                        </g>
+                      </g>
+
+                      <!-- Cute Fine Whiskers Left -->
+                      <line x1="66" y1="113" x2="30" y2="107" stroke="#ffffff" stroke-width="2" opacity="0.85" stroke-linecap="round"/>
+                      <line x1="66" y1="119" x2="26" y2="119" stroke="#ffffff" stroke-width="2" opacity="0.85" stroke-linecap="round"/>
+                      <line x1="66" y1="125" x2="32" y2="131" stroke="#ffffff" stroke-width="2" opacity="0.85" stroke-linecap="round"/>
+                      <!-- Whiskers Right -->
+                      <line x1="154" y1="113" x2="190" y2="107" stroke="#ffffff" stroke-width="2" opacity="0.85" stroke-linecap="round"/>
+                      <line x1="154" y1="119" x2="194" y2="119" stroke="#ffffff" stroke-width="2" opacity="0.85" stroke-linecap="round"/>
+                      <line x1="154" y1="125" x2="188" y2="131" stroke="#ffffff" stroke-width="2" opacity="0.85" stroke-linecap="round"/>
+
+                      <!-- Heart-shaped Pink Nose -->
+                      <path d="M103 113 Q110 109 117 113 Q110 120 103 113 Z" fill="#ff6b81"/>
+
+                      <!-- Cute Animated W-Mouth -->
+                      <path id="mouthLine" d="M101 121 Q110 127 110 121 Q110 127 119 121" fill="none" stroke="#5c3d2e" stroke-width="2.8" stroke-linecap="round"/>
+
+                      <!-- Paws Holding Snack or Reaching -->
+                      <g id="pawsGroup">
+                        <!-- Held Sunflower Seed in paws when snacking -->
+                        <g id="snackInPaws" class="transition-opacity duration-300" opacity="1">
+                          <ellipse cx="110" cy="154" rx="7" ry="11" fill="#78350f" stroke="#f59e0b" stroke-width="1.5" transform="rotate(10 110 154)"/>
+                          <path d="M108 146 L112 162" stroke="#fbbf24" stroke-width="1" opacity="0.7"/>
+                        </g>
+                        <ellipse id="pawLeft" class="hamster-paw paw-left transition-transform duration-150" cx="86" cy="154" rx="10" ry="13" fill="#f8a5c2" transform="rotate(-15 86 154)"/>
+                        <ellipse id="pawRight" class="hamster-paw paw-right transition-transform duration-150" cx="134" cy="154" rx="10" ry="13" fill="#f8a5c2" transform="rotate(15 134 154)"/>
+                      </g>
+
+                      <!-- Dynamic Equipped Costume & Hat Slot -->
+                      <g id="costumeSlot"></g>
+
+                      <!-- Cozy Autumn Bedding Quilt overlay for Sleep Mode -->
+                      <g id="bedQuiltGroup" opacity="0" class="transition-all duration-500 pointer-events-none">
+                        <path d="M50 162 Q110 144 170 162 Q180 200 166 216 Q110 220 54 216 Z" fill="#d97706" opacity="0.95" stroke="#92400e" stroke-width="2.5"/>
+                        <text x="110" y="194" text-anchor="middle" font-size="16" opacity="0.9">🍂 🍂</text>
+                      </g>
+                    </g>
+                  </svg>
 
                   <!-- Equipped Floating Tags -->
                   <div id="tag-hat" class="absolute -top-1 left-4 bg-surface-container-lowest/90 backdrop-blur-md px-2.5 py-0.5 rounded-full shadow-md flex items-center gap-1.5 border border-outline-variant/30 animate-bounce">
                     <span class="w-2 h-2 rounded-full bg-primary"></span>
-                    <span class="text-[11px] font-bold text-on-surface" id="tag-hat-text">Acorn Beret</span>
+                    <span class="text-[11px] font-bold text-on-surface" id="tag-hat-text">Tiny Acorn Beret</span>
                   </div>
 
                   <div id="tag-cheek" class="absolute bottom-12 -right-1 bg-tertiary-fixed text-on-tertiary-fixed px-2.5 py-0.5 rounded-full shadow-md flex items-center gap-1 border border-tertiary/20">
@@ -470,7 +660,7 @@
               <div class="flex items-start gap-2.5">
                 <div class="w-6 h-6 rounded-full bg-primary-container text-white flex items-center justify-center text-xs shrink-0 mt-0.5">✦</div>
                 <div class="bg-surface-container-low p-3 rounded-2xl rounded-tl-sm text-on-surface max-w-[85%] shadow-xs leading-relaxed">
-                  Hi Maya! I'm snuggled in my fresh wood shavings. Did you bring snacks, or should we go for a marathon wheel run? 🌻✨
+                  Hi friend! I'm snuggled in my fresh wood shavings. Did you bring snacks, or should we go for a marathon wheel run? 🌻✨
                 </div>
               </div>
 
@@ -574,11 +764,91 @@
             <div class="relative w-full h-64 bg-cover bg-center rounded-2xl overflow-hidden flex items-center justify-center p-4 border border-outline-variant/20 shadow-inner" id="fitting-preview-box" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAS2191j5aT3MxWu79YGbVvJidWHNODPf12ouzO4aasOgJ_EsS_PknjH0SWEcTHEL8GdRyFudAExPtsbMdFDH6AkqHc2P3OGZds-Nnc8Gv0TEYfGXs0RZIF46XzegxdNOlAu5RbTXwDwVq08XnGbxPVszl1TqmEozkZD1-UkLwDAByxJfKNp0arXKmTsMyPJXF89bPM3JBtiTURSFRDlbMc8y1QQhpnjVG4c719efuQVjbq5OM5dNjrcw');">
               <div class="absolute inset-0 bg-black/10 pointer-events-none"></div>
 
-              <div class="relative w-44 h-44">
-                <img id="fitting-hammy-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByBoA0YaB3IbFXhRllpYa3Ly6-YPUosHkrt8Gcqv-6VZjcjtzxbFQIic_kDcNyk9P7TWY3ygWWU-f5HX6RZpwXuSxG3NpPp9XyXuenWvR_gR5rc6O5Om781B5pyh9hTvFZhBtYmYN80nRTNRiX2ssp_1q95b-4_6Rl687tRcwRqc3a_6T565v47EU8cQKtJ2hz5tu3dWSKn7ELV8xv3g1BvuJ6ATixIol9P5adRwKT0mU50lIzV5TpXg" class="w-full h-full object-contain filter drop-shadow-md"/>
+              <div class="relative w-48 h-48 flex items-center justify-center">
+                <!-- Dedicated SVG Hamster for Fitting Mirror -->
+                <svg class="w-full h-full filter drop-shadow-md select-none" id="fittingHammySvg" viewBox="0 0 220 220">
+                  <defs>
+                    <radialGradient id="fittingBodyFur" cx="45%" cy="38%" r="60%">
+                      <stop offset="0%" stop-color="#fbd38d"/>
+                      <stop offset="55%" stop-color="#f59e0b"/>
+                      <stop offset="100%" stop-color="#d97706"/>
+                    </radialGradient>
+                    <radialGradient id="fittingWhiteBelly" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="#ffffff"/>
+                      <stop offset="100%" stop-color="#fff8f0"/>
+                    </radialGradient>
+                    <radialGradient id="fittingPinkEar" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="#ffccd5"/>
+                      <stop offset="100%" stop-color="#ff7675"/>
+                    </radialGradient>
+                  </defs>
+
+                  <g class="hamster-body-group" id="fittingBodyGroup">
+                    <ellipse cx="76" cy="190" rx="16" ry="10" fill="#f8a5c2"/>
+                    <ellipse cx="144" cy="190" rx="16" ry="10" fill="#f8a5c2"/>
+                    <ellipse cx="110" cy="144" rx="66" ry="56" fill="url(#fittingBodyFur)"/>
+                    <ellipse cx="110" cy="152" rx="40" ry="36" fill="url(#fittingWhiteBelly)" opacity="0.95"/>
+
+                    <g id="fittingCheeksGroup">
+                      <ellipse class="cheek-pouch" id="fittingLeftCheek" cx="62" cy="134" rx="24" ry="20" fill="#f59e0b"/>
+                      <ellipse class="cheek-pouch" id="fittingRightCheek" cx="158" cy="134" rx="24" ry="20" fill="#f59e0b"/>
+                      <circle cx="64" cy="132" r="10" fill="#ff4757" opacity="0.45"/>
+                      <circle cx="156" cy="132" r="10" fill="#ff4757" opacity="0.45"/>
+                    </g>
+
+                    <ellipse cx="110" cy="100" rx="54" ry="48" fill="url(#fittingBodyFur)"/>
+
+                    <g id="fittingEarsGroup">
+                      <g class="ear-left" id="fittingEarLeft">
+                        <ellipse cx="72" cy="56" rx="18" ry="22" fill="#d97706"/>
+                        <ellipse cx="72" cy="58" rx="12" ry="15" fill="url(#fittingPinkEar)"/>
+                      </g>
+                      <g class="ear-right" id="fittingEarRight">
+                        <ellipse cx="148" cy="56" rx="18" ry="22" fill="#d97706"/>
+                        <ellipse cx="148" cy="58" rx="12" ry="15" fill="url(#fittingPinkEar)"/>
+                      </g>
+                    </g>
+
+                    <g id="fittingEyesCluster">
+                      <g id="fittingOpenEyes">
+                        <circle cx="85" cy="98" r="12" fill="#1c1917"/>
+                        <circle cx="85" cy="98" r="6.5" fill="#000000"/>
+                        <circle cx="88" cy="94.5" r="4" fill="#ffffff"/>
+                        <circle cx="83" cy="100.5" r="1.8" fill="#ffffff"/>
+
+                        <circle cx="135" cy="98" r="12" fill="#1c1917"/>
+                        <circle cx="135" cy="98" r="6.5" fill="#000000"/>
+                        <circle cx="138" cy="94.5" r="4" fill="#ffffff"/>
+                        <circle cx="133" cy="100.5" r="1.8" fill="#ffffff"/>
+                      </g>
+                      <g id="fittingSleepingEyes" opacity="0">
+                        <path d="M72 97 Q85 107 98 97" fill="none" stroke="#5c3d2e" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M122 97 Q135 107 148 97" fill="none" stroke="#5c3d2e" stroke-width="3" stroke-linecap="round"/>
+                      </g>
+                    </g>
+
+                    <line x1="66" y1="113" x2="30" y2="107" stroke="#ffffff" stroke-width="2" opacity="0.85" stroke-linecap="round"/>
+                    <line x1="66" y1="119" x2="26" y2="119" stroke="#ffffff" stroke-width="2" opacity="0.85" stroke-linecap="round"/>
+                    <line x1="154" y1="113" x2="190" y2="107" stroke="#ffffff" stroke-width="2" opacity="0.85" stroke-linecap="round"/>
+                    <line x1="154" y1="119" x2="194" y2="119" stroke="#ffffff" stroke-width="2" opacity="0.85" stroke-linecap="round"/>
+
+                    <path d="M103 113 Q110 109 117 113 Q110 120 103 113 Z" fill="#ff6b81"/>
+                    <path id="fittingMouthLine" d="M101 121 Q110 127 110 121 Q110 127 119 121" fill="none" stroke="#5c3d2e" stroke-width="2.8" stroke-linecap="round"/>
+
+                    <g id="fittingPawsGroup">
+                      <g id="fittingSnackInPaws">
+                        <ellipse cx="110" cy="154" rx="7" ry="11" fill="#78350f" stroke="#f59e0b" stroke-width="1.5" transform="rotate(10 110 154)"/>
+                      </g>
+                      <ellipse id="fittingPawLeft" cx="86" cy="154" rx="10" ry="13" fill="#f8a5c2" transform="rotate(-15 86 154)"/>
+                      <ellipse id="fittingPawRight" cx="134" cy="154" rx="10" ry="13" fill="#f8a5c2" transform="rotate(15 134 154)"/>
+                    </g>
+
+                    <g id="fittingCostumeSlot"></g>
+                  </g>
+                </svg>
                 
                 <div class="absolute -top-1 left-2 bg-surface-container-lowest/90 px-2 py-0.5 rounded-full text-[10px] font-bold shadow" id="fitting-tag-hat">
-                  Acorn Beret
+                  Tiny Acorn Beret
                 </div>
                 <div class="absolute bottom-6 -right-1 bg-tertiary-fixed text-on-tertiary-fixed px-2 py-0.5 rounded-full text-[10px] font-bold shadow" id="fitting-tag-cheek">
                   Blushies
@@ -902,7 +1172,7 @@
         {
           id: 2,
           date: 'Sep 5, 2026',
-          caption: 'Found where Maya hid the roasted walnuts. Mission accomplished.',
+          caption: 'Found where the roasted walnuts were hidden. Mission accomplished.',
           stickers: '👑🌰',
           imgUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuByBoA0YaB3IbFXhRllpYa3Ly6-YPUosHkrt8Gcqv-6VZjcjtzxbFQIic_kDcNyk9P7TWY3ygWWU-f5HX6RZpwXuSxG3NpPp9XyXuenWvR_gR5rc6O5Om781B5pyh9hTvFZhBtYmYN80nRTNRiX2ssp_1q95b-4_6Rl687tRcwRqc3a_6T565v47EU8cQKtJ2hz5tu3dWSKn7ELV8xv3g1BvuJ6ATixIol9P5adRwKT0mU50lIzV5TpXg'
         }
@@ -1071,6 +1341,305 @@
       }
     }
 
+
+    /* ======================================================================
+       3B. CAREGIVER CUSTOM NICKNAME & SVG HAMSTER INTERACTIVITY
+       ====================================================================== */
+    function getCaregiverName() {
+      return localStorage.getItem('hammy_caregiver_name') || 'Caregiver';
+    }
+
+    function updateCaregiverUI() {
+      const name = getCaregiverName();
+      const el = document.getElementById('header-caregiver-name');
+      if (el) {
+        el.innerHTML = `<span>${name}</span><span class="material-symbols-outlined text-[12px] opacity-40 group-hover:opacity-100 transition-opacity">edit</span>`;
+      }
+    }
+
+    function editCaregiverName() {
+      const current = getCaregiverName() === 'Caregiver' ? '' : getCaregiverName();
+      const entered = prompt("Enter your preferred nickname (or leave blank for 'Caregiver'):", current);
+      if (entered !== null) {
+        const cleaned = entered.trim() || 'Caregiver';
+        localStorage.setItem('hammy_caregiver_name', cleaned);
+        updateCaregiverUI();
+        setSpeechBubble(`“Squeeeak! I love calling you ${cleaned}! 🌸✨”`);
+      }
+    }
+
+    // Costumes SVG Vector Data
+    const HATS_SVG = {
+      none: '',
+      acorn: `
+        <!-- Acorn Beret -->
+        <g id="costume-acorn">
+          <ellipse cx="110" cy="56" rx="34" ry="18" fill="#8d5b4c" stroke="#5c382e" stroke-width="2"/>
+          <path d="M100 46 Q110 38 120 46" fill="#a46d5c"/>
+          <rect x="108" y="34" width="4" height="10" rx="2" fill="#5c382e"/>
+          <ellipse cx="118" cy="37" rx="6" ry="3.5" fill="#65a30d" transform="rotate(-25 118 37)"/>
+          <path d="M85 54 L135 54 M90 58 L130 58" stroke="#5c382e" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+      `,
+      wizard: `
+        <!-- Midnight Wizard Hat -->
+        <g id="costume-wizard">
+          <path d="M68 66 L110 18 L152 66 Z" fill="#1e1b4b" stroke="#312e81" stroke-width="2"/>
+          <ellipse cx="110" cy="66" rx="46" ry="14" fill="#312e81" stroke="#4338ca" stroke-width="2"/>
+          <polygon points="102,40 105,47 112,47 107,51 109,58 102,54 96,58 98,51 93,47 100,47" fill="#fbbf24"/>
+          <path d="M120 30 A 8 8 0 0 1 126 42 A 6 6 0 0 0 120 30" fill="#fef08a"/>
+        </g>
+      `,
+      shades: `
+        <!-- 8-Bit Pixel Sunglasses -->
+        <g id="costume-shades">
+          <rect x="68" y="88" width="34" height="18" fill="#0f172a" rx="3" stroke="#f59e0b" stroke-width="1.5"/>
+          <rect x="118" y="88" width="34" height="18" fill="#0f172a" rx="3" stroke="#f59e0b" stroke-width="1.5"/>
+          <rect x="98" y="93" width="24" height="5" fill="#0f172a"/>
+          <line x1="72" y1="92" x2="82" y2="102" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
+          <line x1="122" y1="92" x2="132" y2="102" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
+        </g>
+      `,
+      glasses: `
+        <!-- Round Wireframe Glasses -->
+        <g id="costume-glasses">
+          <circle cx="85" cy="98" r="16" fill="none" stroke="#d97706" stroke-width="2.5"/>
+          <circle cx="135" cy="98" r="16" fill="none" stroke="#d97706" stroke-width="2.5"/>
+          <path d="M101 96 Q110 92 119 96" fill="none" stroke="#d97706" stroke-width="2.5"/>
+          <line x1="69" y1="96" x2="56" y2="88" stroke="#d97706" stroke-width="2"/>
+          <line x1="151" y1="96" x2="164" y2="88" stroke="#d97706" stroke-width="2"/>
+        </g>
+      `,
+      flower: `
+        <!-- Strawberry Blossom Pin -->
+        <g id="costume-flower" transform="translate(148, 54)">
+          <circle cx="0" cy="-6" r="4.5" fill="#fecdd3"/>
+          <circle cx="6" cy="0" r="4.5" fill="#fecdd3"/>
+          <circle cx="0" cy="6" r="4.5" fill="#fecdd3"/>
+          <circle cx="-6" cy="0" r="4.5" fill="#fecdd3"/>
+          <circle cx="0" cy="0" r="3.5" fill="#fef08a"/>
+          <circle cx="0" cy="0" r="1.5" fill="#d97706"/>
+        </g>
+      `,
+      detective: `
+        <!-- Sherlock Plaid Houndstooth Cap & Monocle -->
+        <g id="costume-detective">
+          <ellipse cx="110" cy="62" rx="44" ry="16" fill="#78716c" stroke="#57534e" stroke-width="2"/>
+          <path d="M72 62 Q110 32 148 62 Z" fill="#a8a29e" stroke="#57534e" stroke-width="1.5"/>
+          <path d="M106 32 Q110 30 114 32 L110 40 Z" fill="#44403c"/>
+          <circle cx="135" cy="98" r="15" fill="rgba(254, 240, 138, 0.25)" stroke="#d97706" stroke-width="2.5"/>
+          <path d="M150 98 Q158 110 162 124" fill="none" stroke="#d97706" stroke-width="1.5" stroke-dasharray="2,2"/>
+        </g>
+      `,
+      scarf: `
+        <!-- Yellow Buttercup Wool Scarf -->
+        <g id="costume-scarf">
+          <path d="M74 136 Q110 148 146 136 Q150 146 142 152 Q110 162 78 152 Z" fill="#f59e0b" stroke="#d97706" stroke-width="2"/>
+          <path d="M124 148 L126 174 L138 174 L134 148 Z" fill="#f59e0b" stroke="#d97706" stroke-width="1.5"/>
+          <line x1="126" y1="174" x2="126" y2="178" stroke="#d97706" stroke-width="2"/>
+          <line x1="130" y1="174" x2="130" y2="178" stroke="#d97706" stroke-width="2"/>
+          <line x1="134" y1="174" x2="134" y2="178" stroke="#d97706" stroke-width="2"/>
+          <line x1="138" y1="174" x2="138" y2="178" stroke="#d97706" stroke-width="2"/>
+        </g>
+      `,
+      crown: `
+        <!-- Sunflower Circlet Crown -->
+        <g id="costume-crown">
+          <path d="M74 62 L88 74 L110 48 L132 74 L146 62 L142 82 L78 82 Z" fill="#fbbf24" stroke="#d97706" stroke-width="2.5"/>
+          <circle cx="110" cy="48" r="4.5" fill="#ef4444"/>
+          <circle cx="74" cy="62" r="3.5" fill="#3b82f6"/>
+          <circle cx="146" cy="62" r="3.5" fill="#10b981"/>
+          <circle cx="99" cy="76" r="2.5" fill="#ffffff" opacity="0.8"/>
+          <circle cx="121" cy="76" r="2.5" fill="#ffffff" opacity="0.8"/>
+        </g>
+      `
+    };
+
+    function updateHammyCostume(hatKey) {
+      const markup = HATS_SVG[hatKey] || '';
+      const slot1 = document.getElementById('costumeSlot');
+      const slot2 = document.getElementById('fittingCostumeSlot');
+      if (slot1) slot1.innerHTML = markup;
+      if (slot2) slot2.innerHTML = markup;
+    }
+
+    // Real-time Pupil Gaze Tracking
+    function updateGaze(e) {
+      if (appState.isSleeping) return;
+      const svg = document.getElementById('hammyMasterSvg');
+      if (!svg) return;
+      const rect = svg.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const dx = e.clientX - centerX;
+      const dy = e.clientY - centerY;
+      const angle = Math.atan2(dy, dx);
+      const dist = Math.min(3.5, Math.hypot(dx, dy) / 45);
+
+      const pupilX = Math.cos(angle) * dist;
+      const pupilY = Math.sin(angle) * dist;
+
+      const lp = document.getElementById('leftPupil');
+      const rp = document.getElementById('rightPupil');
+      if (lp) {
+        lp.setAttribute('cx', 85 + pupilX);
+        lp.setAttribute('cy', 98 + pupilY);
+      }
+      if (rp) {
+        rp.setAttribute('cx', 135 + pupilX);
+        rp.setAttribute('cy', 98 + pupilY);
+      }
+    }
+    window.addEventListener('mousemove', updateGaze);
+
+    // Blinking animation
+    function triggerBlink() {
+      if (appState.isSleeping) return;
+      const l = document.getElementById('leftEyeLid');
+      const r = document.getElementById('rightEyeLid');
+      if (l && r) {
+        l.style.opacity = '1';
+        r.style.opacity = '1';
+        setTimeout(() => {
+          l.style.opacity = '0';
+          r.style.opacity = '0';
+        }, 130);
+      }
+      setTimeout(triggerBlink, 2600 + Math.random() * 4000);
+    }
+    setTimeout(triggerBlink, 3000);
+
+    // Ear twitching
+    function twitchEars() {
+      const el = document.getElementById('earLeft');
+      const er = document.getElementById('earRight');
+      if (!el || !er) return;
+      el.style.transform = 'rotate(-14deg)';
+      er.style.transform = 'rotate(14deg)';
+      setTimeout(() => {
+        el.style.transform = 'rotate(0deg)';
+        er.style.transform = 'rotate(0deg)';
+      }, 350);
+    }
+
+    // Animate Hammy chewing & cheeks puffing
+    function animateHammyChew() {
+      const lc = document.getElementById('leftCheek');
+      const rc = document.getElementById('rightCheek');
+      const mouth = document.getElementById('mouthLine');
+
+      if (lc && rc) {
+        lc.style.transform = 'scale(1.35)';
+        rc.style.transform = 'scale(1.35)';
+        lc.style.transformOrigin = '62px 134px';
+        rc.style.transformOrigin = '158px 134px';
+      }
+
+      if (mouth) {
+        mouth.setAttribute('d', 'M101 121 Q110 134 110 121 Q110 134 119 121');
+      }
+
+      setTimeout(() => {
+        if (mouth) mouth.setAttribute('d', 'M101 121 Q110 127 110 121 Q110 127 119 121');
+        if (lc && rc) {
+          lc.style.transform = 'scale(1.1)';
+          rc.style.transform = 'scale(1.1)';
+        }
+      }, 350);
+    }
+
+    // Animate Zoomies
+    function animateHammyZoomies() {
+      const body = document.getElementById('hamsterBodyGroup');
+      const pawL = document.getElementById('pawLeft');
+      const pawR = document.getElementById('pawRight');
+      const footL = document.getElementById('footLeft');
+      const footR = document.getElementById('footRight');
+
+      if (body) {
+        body.style.transform = 'scale(1.05) translateY(-6px)';
+      }
+      if (pawL && pawR) {
+        pawL.style.transform = 'rotate(-35deg)';
+        pawR.style.transform = 'rotate(35deg)';
+      }
+      if (footL && footR) {
+        footL.style.transform = 'translateY(-4px)';
+        footR.style.transform = 'translateY(-4px)';
+      }
+
+      setTimeout(() => {
+        if (body) body.style.transform = 'scale(1) translateY(0)';
+        if (pawL && pawR) {
+          pawL.style.transform = 'rotate(-15deg)';
+          pawR.style.transform = 'rotate(15deg)';
+        }
+        if (footL && footR) {
+          footL.style.transform = 'translateY(0)';
+          footR.style.transform = 'translateY(0)';
+        }
+      }, 500);
+    }
+
+    // Pose selector on SVG Hamster
+    function applyHammyPoseSVG(pose) {
+      const lc = document.getElementById('fittingLeftCheek');
+      const rc = document.getElementById('fittingRightCheek');
+      const mouth = document.getElementById('fittingMouthLine');
+      const snack = document.getElementById('fittingSnackInPaws');
+      const openEyes = document.getElementById('fittingOpenEyes');
+      const sleepEyes = document.getElementById('fittingSleepingEyes');
+
+      if (!lc || !rc) return;
+
+      // Reset
+      lc.style.transform = 'scale(1)';
+      rc.style.transform = 'scale(1)';
+      if (mouth) mouth.setAttribute('d', 'M101 121 Q110 127 110 121 Q110 127 119 121');
+      if (snack) snack.style.opacity = '1';
+      if (openEyes) openEyes.style.opacity = '1';
+      if (sleepEyes) sleepEyes.style.opacity = '0';
+
+      if (pose === 'nibble') {
+        if (mouth) mouth.setAttribute('d', 'M101 121 Q110 132 110 121 Q110 132 119 121');
+        lc.style.transform = 'scale(1.2)';
+        rc.style.transform = 'scale(1.2)';
+        lc.style.transformOrigin = '62px 134px';
+        rc.style.transformOrigin = '158px 134px';
+      } else if (pose === 'pouch') {
+        lc.style.transform = 'scale(1.4)';
+        rc.style.transform = 'scale(1.4)';
+        lc.style.transformOrigin = '62px 134px';
+        rc.style.transformOrigin = '158px 134px';
+      } else if (pose === 'sleepy') {
+        if (openEyes) openEyes.style.opacity = '0';
+        if (sleepEyes) sleepEyes.style.opacity = '1';
+        if (snack) snack.style.opacity = '0';
+      } else if (pose === 'strut') {
+        lc.style.transform = 'scale(1.05)';
+        rc.style.transform = 'scale(1.05)';
+      }
+    }
+
+    // Handle Hammy Click
+    function handleHammyClick(e) {
+      if (appState.isSleeping) {
+        // Wake up!
+        appState.isSleeping = false;
+        document.getElementById('openEyesGroup').style.opacity = '1';
+        document.getElementById('sleepingEyesGroup').style.opacity = '0';
+        document.getElementById('bedQuiltGroup').style.opacity = '0';
+        document.getElementById('hamsterBodyGroup').style.animationDuration = '3.5s';
+        setSpeechBubble("“*yawns squeakily and peeks out* Good morning! I am energized and ready for seeds!” 🌻✨");
+        audio.playBabble();
+        return;
+      }
+
+      petHammy();
+      twitchEars();
+    }
+
     /* ======================================================================
        4. INTERACTIVE HABITAT: CARE, VITALS & PETTING
        ====================================================================== */
@@ -1091,9 +1660,8 @@
     function feedHammy(foodType) {
       audio.playCrunch();
       
-      const avatar = document.getElementById('hammy-avatar-img');
-      avatar.classList.add('scale-110');
-      setTimeout(() => avatar.classList.remove('scale-110'), 300);
+      // Animate chubby cheeks and chewing mouth
+      animateHammyChew();
 
       spawnCrumbs();
 
@@ -1107,7 +1675,7 @@
       appState.vitals.happy = Math.min(100, appState.vitals.happy + 6);
       updateVitalsDisplay();
 
-      setSpeechBubble(quotes[foodType] || "“Nom nom nom! Thank you Maya!”");
+      setSpeechBubble(quotes[foodType] || `“Nom nom nom! Thank you ${getCaregiverName() === "Caregiver" ? "friend" : getCaregiverName()}!” 🌻`);
     }
 
     function spawnCrumbs() {
@@ -1145,9 +1713,7 @@
 
     function triggerZoomies() {
       audio.playBabble();
-      const avatar = document.getElementById('hammy-avatar-img');
-      avatar.classList.add('animate-spin');
-      setTimeout(() => avatar.classList.remove('animate-spin'), 600);
+      animateHammyZoomies();
 
       appState.vitals.energy = Math.max(10, appState.vitals.energy - 10);
       appState.vitals.happy = Math.min(100, appState.vitals.happy + 12);
@@ -1158,9 +1724,42 @@
 
     function putToSleep() {
       audio.playPurr();
+      appState.isSleeping = true;
       appState.vitals.energy = 100;
       updateVitalsDisplay();
-      setSpeechBubble("“*yawns a giant squeaky yawn and burrows into the aspen shavings* 💤 Sweet dreams Maya...”");
+
+      // Show cozy sleeping eyes and quilt blanket
+      const openEyes = document.getElementById('openEyesGroup');
+      const sleepEyes = document.getElementById('sleepingEyesGroup');
+      const quilt = document.getElementById('bedQuiltGroup');
+      const body = document.getElementById('hamsterBodyGroup');
+
+      if (openEyes) openEyes.style.opacity = '0';
+      if (sleepEyes) sleepEyes.style.opacity = '1';
+      if (quilt) quilt.style.opacity = '1';
+      if (body) body.style.animationDuration = '6s'; // slow cozy breathing
+
+      // Spawn Zzz bubbles
+      spawnZzz();
+
+      setSpeechBubble(`“*yawns a giant squeaky yawn and burrows into the aspen shavings* 💤 Sweet dreams ${getCaregiverName() === "Caregiver" ? "friend" : getCaregiverName()}...”`);
+    }
+
+    function spawnZzz() {
+      if (!appState.isSleeping) return;
+      const zone = document.getElementById('hammy-interactive-zone');
+      if (!zone) return;
+      const zzz = document.createElement('div');
+      zzz.className = 'zzz-bubble';
+      zzz.textContent = 'z';
+      zzz.style.left = `${50 + (Math.random() * 20 - 10)}%`;
+      zzz.style.top = '35%';
+      zone.appendChild(zzz);
+      setTimeout(() => zzz.remove(), 2500);
+
+      if (appState.isSleeping) {
+        setTimeout(spawnZzz, 1800);
+      }
     }
 
     function setSpeechBubble(text) {
@@ -1207,7 +1806,7 @@
               contents: [{
                 role: 'user',
                 parts: [{
-                  text: `User is talking to their cute pet hamster named Hammy in a cozy terrarium. Reply in character as Hammy (cheerful, adorable, loves sunflower seeds, includes occasional hamster actions like *sniffs* or *twitches whiskers*). User message: "${text}"`
+                  text: `You are Hammy, an adorable, enthusiastic dwarf hamster companion living in a cozy terrarium. The user talking to you is your beloved caregiver and friend (their nickname is: ${getCaregiverName()}). Do NOT call them Maya. Reply cheerfully in character as Hammy with cute squeaks, whisker twitches, and love for sunflower seeds. User message: "${text}"`
                 }]
               }]
             }
@@ -1228,7 +1827,7 @@
         const fallbackAnswers = [
           "“*sniffs your hand excitedly* I was just wondering if you had any roasted pumpkin seeds! Also, I think my running wheel is calling me! ✨”",
           "“*twitches tiny velvet ears* Oh! I love when you talk to me. Did you know my cheek pouches can stretch all the way to my shoulders? 🐹”",
-          "“Squeeeeak! You're the best caregiver in the whole world Maya! Can I have one more treat before bedtime? 🌸”",
+          `“Squeeeeak! You're the best caregiver and best friend in the whole world! Can I have one more treat before bedtime? 🌸”`,
           "“*wiggles little pink nose* I investigated the whole terrarium today. Everything is safe and cozy!”"
         ];
         const chosen = fallbackAnswers[Math.floor(Math.random() * fallbackAnswers.length)];
@@ -1356,6 +1955,7 @@
         if (tag) tag.textContent = name;
         const mainTag = document.getElementById('tag-hat-text');
         if (mainTag) mainTag.textContent = name;
+        updateHammyCostume(id);
       }
       if (slot === 'cheek') {
         const tag = document.getElementById('fitting-tag-cheek');
@@ -1382,11 +1982,7 @@
       });
       btn.className = "pose-btn active bg-primary-container text-on-primary-container font-bold py-1.5 rounded-full text-center";
 
-      const avatar = document.getElementById('fitting-hammy-avatar');
-      if (avatar) {
-        avatar.classList.add('scale-95');
-        setTimeout(() => avatar.classList.remove('scale-95'), 200);
-      }
+      applyHammyPoseSVG(pose);
     }
 
     function resetLookDefault() {
@@ -1634,9 +2230,11 @@
        9. INITIALIZATION
        ====================================================================== */
     document.addEventListener('DOMContentLoaded', () => {
+      updateCaregiverUI();
       updateVitalsDisplay();
       updateSeedsUI();
       renderBoutiqueCatalog();
+      updateHammyCostume('acorn');
     });
   </script>
 
