@@ -33,7 +33,7 @@ const server = http.createServer((req, res) => {
       try {
         const parsed = JSON.parse(body);
         const apiKey = parsed.apiKey || DEFAULT_API_KEY;
-        const model = parsed.model || 'gemini-3.6-flash';
+        const model = parsed.model || 'gemini-3.5-flash-lite';
         const payloadStr = JSON.stringify(parsed.payload);
 
         const geminiReq = https.request({
